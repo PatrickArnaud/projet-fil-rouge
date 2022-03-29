@@ -1,6 +1,6 @@
 package FilRouge.Controlleur;
 
-import FilRouge.Model.Login;
+import FilRouge.Model.MLogin;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
@@ -12,8 +12,8 @@ import javax.imageio.ImageIO;
 
 public class DBLogin {
 
-    static public Login getLog(String username, String password) {
-        Login log = null;
+    static public MLogin getLog(String username, String password) {
+        MLogin log = null;
 
         try {
 
@@ -22,7 +22,7 @@ public class DBLogin {
             Statement smt = cnx.createStatement();
             ResultSet resultSet = smt.executeQuery(query);
             while (resultSet.next()) {
-                log = new Login();
+                log = new MLogin();
                 log.setId(resultSet.getInt(1));
                 log.setUsername(resultSet.getString(2));
                 log.setLogin(resultSet.getBoolean(3));

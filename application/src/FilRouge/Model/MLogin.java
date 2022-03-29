@@ -2,7 +2,7 @@
 package FilRouge.Model;
 
 
-public class Login {
+public class MLogin {
     
     int id;
     String username;

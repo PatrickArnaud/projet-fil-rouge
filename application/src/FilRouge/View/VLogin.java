@@ -7,7 +7,7 @@ package FilRouge.View;
 
 import FilRouge.Controlleur.DBConnect;
 import FilRouge.Controlleur.DBLogin;
-import FilRouge.Model.Login;
+import FilRouge.Model.MLogin;
 
 /**
  *
@@ -16,7 +16,7 @@ import FilRouge.Model.Login;
 public class VLogin extends javax.swing.JFrame {
 
     /**
-     * Creates new form Login
+     * Creates new form MLogin
      */
     public VLogin() {
         initComponents();
@@ -173,12 +173,12 @@ public class VLogin extends javax.swing.JFrame {
 
     private void button_connectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_connectActionPerformed
         try {
-            Login log = DBLogin.getLog(username_field.getText(), password_field.getText());
+            MLogin log = DBLogin.getLog(username_field.getText(), password_field.getText());
             if (log.isLogin()) {
                 System.out.println("Bienvenue " + log.getUsername());
                 java.awt.EventQueue.invokeLater(new Runnable() {
                     public void run() {
-                        new VMain().setVisible(true);
+                        new VMain().setVisible(true);   
                     }
                 });
             } else {
