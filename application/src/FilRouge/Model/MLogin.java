@@ -10,6 +10,11 @@ public class MLogin {
     boolean login;
     int id_role;
 
+    
+    public MLogin() {
+    }
+    
+
     @Override
     public String toString() {
         return "Login{" + "id=" + id + ", username=" + username + ", password=" + password + ", login=" + login + ", id_role=" + id_role + '}';

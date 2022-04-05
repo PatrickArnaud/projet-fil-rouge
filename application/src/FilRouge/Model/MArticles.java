@@ -1,21 +1,61 @@
 package FilRouge.Model;
+import java.sql.Date;
 
 public class MArticles {
-    
+
     private int id;
     private String name;
     private String brand;
     private String provider;
     private String status_article;
+    private String type;
+    String origin;
+    private int id_user;
 
-    public MArticles(int id, String name, String brand, String provider) {
-        this.id = id;
-        this.name = name;
-        this.brand = brand;
-        this.provider = provider;
+    @Override
+    public String toString() {
+        return "MArticles{" + "id=" + id + ", name=" + name + ", brand=" + brand + ", provider=" + provider + ", status_article=" + status_article + ", type=" + type + ", origin=" + origin + ", id_user=" + id_user + ", creation_date=" + creation_date + '}';
+    }
+    private Date creation_date; 
+    
+       
+    public MArticles() {
+    }
+
+    public Date getCreation_date() {
+        return creation_date;
+    }
+
+    public void setCreation_date(Date creation_date) {
+        this.creation_date = creation_date;
+    }
+
+ 
+    public void setOrigin(String origin) {
+        this.origin = origin;
     }
     
-      public MArticles() {
+    public int getId_user() {
+        return id_user;
+    }
+
+    public void setId_user(int id_user) {
+        this.id_user = id_user;
+    }
+    
+     public String getOrigin() {
+        return origin;
+    }
+    public MArticles(String origin) {
+        this.origin = origin;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getStatus_article() {
@@ -25,7 +65,6 @@ public class MArticles {
     public void setStatus_article(String status_article) {
         this.status_article = status_article;
     }
- 
 
     public int getId() {
         return id;
@@ -59,14 +98,6 @@ public class MArticles {
         this.provider = provider;
     }
 
-    @Override
-    public String toString() {
-        
-        return "MArticles{" + "id=" + id + ", name=" + name + ", brand=" + brand + ", provider=" + provider + '}';
-    }
-    
-    
-    
+  
    
-    
 }

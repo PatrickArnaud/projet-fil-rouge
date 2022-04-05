@@ -1,12 +1,10 @@
 package FilRouge.Model;
 
-import FilRouge.Controlleur.DBProvider;
-import java.util.ArrayList;
-
 public class MProvider {
 
     int provider_id;
     String provider_name;
+    String origin;
 
     public MProvider(int provider_id, String provider_name) {
         this.provider_id = provider_id;

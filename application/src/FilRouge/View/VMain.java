@@ -6,16 +6,24 @@ import FilRouge.Controlleur.DBLogin;
 import FilRouge.Controlleur.DBProvider;
 import FilRouge.Model.MArticles;
 import FilRouge.Model.MLogin;
-import FilRouge.Model.MProvider;
+import com.formdev.flatlaf.FlatDarkLaf;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import static java.lang.Integer.parseInt;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 
 public class VMain extends javax.swing.JFrame {
 
     public VMain() {
         initComponents();
+        ImageIcon icon = new ImageIcon("C:\\Users\\Patri\\Desktop\\filrouge\\projet-fil-rouge\\application\\src\\FilRouge\\Assets\\NESTI.png");
+        this.setIconImage(icon.getImage());
         tabbed_pane.removeTabAt(4);
         tabbed_pane.removeTabAt(3);
         tabbed_pane.removeTabAt(2);
@@ -47,6 +55,7 @@ public class VMain extends javax.swing.JFrame {
         manual_user = new javax.swing.JLabel();
         manual_supplier = new javax.swing.JLabel();
         manual_command = new javax.swing.JLabel();
+        id_user = new javax.swing.JLabel();
         article = new javax.swing.JPanel();
         label1 = new java.awt.Label();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -58,6 +67,15 @@ public class VMain extends javax.swing.JFrame {
         add_product_name = new java.awt.TextField();
         add_article_provider = new java.awt.Choice();
         add_article_type = new java.awt.Choice();
+        add_article_button = new javax.swing.JButton();
+        add_article_status = new java.awt.Choice();
+        jLabel10 = new javax.swing.JLabel();
+        add_article_message = new javax.swing.JLabel();
+        add_article_origin = new java.awt.Choice();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        input_search = new javax.swing.JTextField();
+        message_search = new javax.swing.JLabel();
         command = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         administration = new javax.swing.JPanel();
@@ -91,14 +109,20 @@ public class VMain extends javax.swing.JFrame {
             .addGap(0, 50, Short.MAX_VALUE)
         );
 
-        username_field.setBackground(new java.awt.Color(255, 255, 255));
+        username_field.setBackground(new java.awt.Color(153, 153, 153));
+        username_field.setFont(new java.awt.Font("Dubai", 0, 24)); // NOI18N
+        username_field.setForeground(new java.awt.Color(0, 0, 0));
+        username_field.setCaretColor(new java.awt.Color(204, 204, 204));
         username_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 username_fieldActionPerformed(evt);
             }
         });
 
-        password_field.setBackground(new java.awt.Color(255, 255, 255));
+        password_field.setBackground(new java.awt.Color(153, 153, 153));
+        password_field.setFont(new java.awt.Font("Dubai", 0, 24)); // NOI18N
+        password_field.setForeground(new java.awt.Color(0, 0, 0));
+        password_field.setCaretColor(new java.awt.Color(153, 153, 153));
         password_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 password_fieldActionPerformed(evt);
@@ -106,12 +130,16 @@ public class VMain extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Dubai", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 204, 204));
         jLabel1.setText("Mot de passe");
 
         jLabel2.setFont(new java.awt.Font("Dubai", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(204, 204, 204));
         jLabel2.setText("Utilisateur");
 
-        button_connect.setFont(new java.awt.Font("Dubai", 0, 14)); // NOI18N
+        button_connect.setBackground(new java.awt.Color(51, 51, 51));
+        button_connect.setFont(new java.awt.Font("Dubai", 0, 24)); // NOI18N
+        button_connect.setForeground(new java.awt.Color(255, 255, 255));
         button_connect.setLabel("Connexion");
         button_connect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -138,7 +166,7 @@ public class VMain extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(loginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(error_message, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(button_connect, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
+                            .addComponent(button_connect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(password_field)
                             .addComponent(username_field))
                         .addGap(163, 163, 163)))
@@ -163,7 +191,7 @@ public class VMain extends javax.swing.JFrame {
                 .addComponent(button_connect, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45)
                 .addComponent(error_message, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(0, 0, 204));
@@ -240,15 +268,20 @@ public class VMain extends javax.swing.JFrame {
                     .addComponent(manual_command, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(manual_article, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(statut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(welcome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(manual, javax.swing.GroupLayout.DEFAULT_SIZE, 1256, Short.MAX_VALUE))
+                    .addComponent(manual, javax.swing.GroupLayout.DEFAULT_SIZE, 1256, Short.MAX_VALUE)
+                    .addGroup(profileLayout.createSequentialGroup()
+                        .addComponent(welcome, javax.swing.GroupLayout.PREFERRED_SIZE, 1100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(id_user, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(54, 54, 54))
         );
         profileLayout.setVerticalGroup(
             profileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(profileLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addComponent(welcome, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(profileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(welcome, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
+                    .addComponent(id_user, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(30, 30, 30)
                 .addComponent(statut, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50)
@@ -267,6 +300,7 @@ public class VMain extends javax.swing.JFrame {
         tabbed_pane.addTab("Profil", profile);
 
         label1.setFont(new java.awt.Font("Dubai", 1, 24)); // NOI18N
+        label1.setForeground(new java.awt.Color(204, 204, 204));
         label1.setText("Ajouter un article:");
 
         article_list.setModel(new javax.swing.table.DefaultTableModel(
@@ -274,7 +308,7 @@ public class VMain extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Produit", "Marque", "Fournisseur", "Conditionnement", "Disponibilité"
+                "Produit", "Marque", "Fournisseur", "Origine", "Disponibilité"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -293,9 +327,46 @@ public class VMain extends javax.swing.JFrame {
 
         jLabel9.setText("Type");
 
+        add_product_name.setBackground(new java.awt.Color(51, 51, 51));
+        add_product_name.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         add_product_name.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 add_product_nameActionPerformed(evt);
+            }
+        });
+
+        add_article_provider.setBackground(new java.awt.Color(51, 51, 51));
+        add_article_provider.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        add_article_type.setBackground(new java.awt.Color(51, 51, 51));
+
+        add_article_button.setBackground(new java.awt.Color(51, 51, 51));
+        add_article_button.setForeground(new java.awt.Color(255, 255, 255));
+        add_article_button.setText("Ajouter article");
+        add_article_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                add_article_buttonActionPerformed(evt);
+            }
+        });
+
+        add_article_status.setBackground(new java.awt.Color(51, 51, 51));
+
+        jLabel10.setText("Disponibilité");
+
+        add_article_origin.setBackground(new java.awt.Color(51, 51, 51));
+
+        jLabel11.setText("Provenance");
+
+        jLabel12.setText("Rechercher par nom");
+
+        input_search.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                input_searchActionPerformed(evt);
+            }
+        });
+        input_search.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                input_searchKeyReleased(evt);
             }
         });
 
@@ -304,7 +375,7 @@ public class VMain extends javax.swing.JFrame {
         articleLayout.setHorizontalGroup(
             articleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(articleLayout.createSequentialGroup()
-                .addGap(50, 50, 50)
+                .addContainerGap()
                 .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, articleLayout.createSequentialGroup()
@@ -313,22 +384,43 @@ public class VMain extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(jLabel8)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel9))
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11))
                 .addGap(38, 38, 38)
                 .addGroup(articleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(add_article_message, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                    .addComponent(add_article_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(add_product_name, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(add_article_provider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(add_article_type, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE))
+                    .addComponent(add_article_type, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                    .addComponent(add_article_status, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                    .addComponent(add_article_origin, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(articleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(articleLayout.createSequentialGroup()
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(input_search, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(message_search, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(53, 53, 53))
         );
         articleLayout.setVerticalGroup(
             articleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, articleLayout.createSequentialGroup()
-                .addContainerGap(38, Short.MAX_VALUE)
-                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
+                .addContainerGap()
+                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
+                .addGroup(articleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(articleLayout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addGroup(articleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(message_search, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(input_search))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(articleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(articleLayout.createSequentialGroup()
                         .addGroup(articleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -343,8 +435,20 @@ public class VMain extends javax.swing.JFrame {
                                 .addGap(25, 25, 25)
                                 .addComponent(jLabel9))
                             .addComponent(add_article_type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel7))
+                        .addGap(22, 22, 22)
+                        .addGroup(articleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(add_article_status, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10))
+                        .addGap(8, 8, 8)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(articleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(add_article_origin, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11))
+                        .addGap(29, 29, 29)
+                        .addComponent(add_article_button)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(add_article_message, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(58, 58, 58))
         );
@@ -359,16 +463,16 @@ public class VMain extends javax.swing.JFrame {
         commandLayout.setHorizontalGroup(
             commandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(commandLayout.createSequentialGroup()
-                .addGap(35, 35, 35)
+                .addContainerGap()
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1027, Short.MAX_VALUE))
+                .addContainerGap(1056, Short.MAX_VALUE))
         );
         commandLayout.setVerticalGroup(
             commandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(commandLayout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(654, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(686, Short.MAX_VALUE))
         );
 
         tabbed_pane.addTab("Commande", command);
@@ -381,16 +485,16 @@ public class VMain extends javax.swing.JFrame {
         administrationLayout.setHorizontalGroup(
             administrationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(administrationLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addContainerGap()
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 492, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(842, Short.MAX_VALUE))
+                .addContainerGap(866, Short.MAX_VALUE))
         );
         administrationLayout.setVerticalGroup(
             administrationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(administrationLayout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(639, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(686, Short.MAX_VALUE))
         );
 
         tabbed_pane.addTab("Admnistration", administration);
@@ -399,19 +503,57 @@ public class VMain extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbed_pane, javax.swing.GroupLayout.PREFERRED_SIZE, 1366, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tabbed_pane, javax.swing.GroupLayout.PREFERRED_SIZE, 1366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbed_pane, javax.swing.GroupLayout.PREFERRED_SIZE, 768, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(tabbed_pane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 768, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void username_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_username_fieldActionPerformed
+    private void input_searchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_input_searchKeyReleased
+
+        try {
+            load_article_search(DBArticle.searchArticles(input_search.getText()));
+        } catch (SQLException ex) {
+            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_input_searchKeyReleased
+
+    private void input_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_input_searchActionPerformed
+
+        //ICI
+    }//GEN-LAST:event_input_searchActionPerformed
+
+    private void add_article_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_article_buttonActionPerformed
+        MArticles art = new MArticles();
+        art.setName(add_product_name.getText());
+        art.setProvider(add_article_provider.getSelectedItem());
+        art.setStatus_article(add_article_status.getSelectedItem());
+        art.setType(add_article_type.getSelectedItem());
+        art.setOrigin(add_article_origin.getSelectedItem());
+        art.setId_user(DBProvider.getProvidersByName(add_article_provider.getSelectedItem()));
+        try {
+            DBArticle.addArticle(art, parseInt(id_user.getText()));
+        } catch (SQLException ex) {
+            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            load_article_without_listener();
+        } catch (SQLException ex) {
+            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        add_article_message.setText("Ajout de " + art.getName() + " Effectué");
+    }//GEN-LAST:event_add_article_buttonActionPerformed
+
+    private void add_product_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_product_nameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_username_fieldActionPerformed
+    }//GEN-LAST:event_add_product_nameActionPerformed
 
     private void button_connectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_connectActionPerformed
         try {
@@ -422,9 +564,12 @@ public class VMain extends javax.swing.JFrame {
                 tabbed_pane.add(profile, "Profil");
                 tabbed_pane.add(article, "Article");
                 load_article();
+                load_add_article_type();
+                load_add_article_origin();
+                load_add_article_status();
+                load_add_article_provider();
                 tabbed_pane.add(command, "Commande");
                 tabbed_pane.add(administration, "Administration");
-
                 tabbed_pane.removeTabAt(0);
 
             } else if (log.isLogin() && log.getId_role() == 2) {
@@ -457,13 +602,17 @@ public class VMain extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_password_fieldActionPerformed
 
-    private void add_product_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_product_nameActionPerformed
+    private void username_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_username_fieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_add_product_nameActionPerformed
+    }//GEN-LAST:event_username_fieldActionPerformed
 
-    public void load_article() {
+    public void load_article() throws SQLException {
         ArrayList<MArticles> arr = new ArrayList<>();
-        article_list.removeAll();
+        DefaultTableModel model = (DefaultTableModel) article_list.getModel();
+        model.setRowCount(0);
+        article_list.setAutoCreateRowSorter(true);
+
+        //event listener for modify
         article_list.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
@@ -472,31 +621,67 @@ public class VMain extends javax.swing.JFrame {
                     MArticles art = new MArticles();
                     if (col == 0) {
                         //by name
-                        art = DBArticle.getArticleByName((String) article_list.getValueAt(row, col));
+                        art = DBArticle.getArticleByNameDetails((String) article_list.getValueAt(row, col));
                     } else if (col == 1) {
                         //by brand
-                        art = DBArticle.getArticleByName((String) article_list.getValueAt(row, 0));
+                        art = DBArticle.getArticleByNameDetails((String) article_list.getValueAt(row, 0));
                     } else if (col == 2) {
                         //by provider
-                        art = DBArticle.getArticleByName((String) article_list.getValueAt(row, 0));
+                        art = DBArticle.getArticleByNameDetails((String) article_list.getValueAt(row, 0));
                     } else if (col == 3) {
-                        //by size
-                        art = DBArticle.getArticleByName((String) article_list.getValueAt(row, 0));
+                        //by origin
+                        art = DBArticle.getArticleByNameDetails((String) article_list.getValueAt(row, 0));
+                    } else if (col == 4) {
+                        //by disponibility
+                        art = DBArticle.getArticleByNameDetails((String) article_list.getValueAt(row, 0));
                     }
-                    VDetails details = new VDetails(art);
+                    VDetails details = new VDetails(art, article_list);
                     details.setVisible(true);
                 }
-
             }
-
         });
         arr = getArticles();
-        System.out.println("ici" + arr.size());
         DefaultTableModel table = (DefaultTableModel) article_list.getModel();
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
             add = arr.get(i);
-            String show[] = {add.getName(), add.getBrand(), add.getProvider(), add.getBrand()};
+            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersById(DBProvider.getProvidersByIdArticle(add.getId())), DBProvider.getOriginByIdArticle(add.getId()), add.getStatus_article()};
+            table.addRow(show);
+        }
+
+    }
+
+    public void load_article_search(ArrayList<MArticles> arr) throws SQLException {
+        if (arr.size() == 0) {
+            message_search.setText("Oups, il n'y a rien ici ...");
+        } else {
+            message_search.setText("");
+        }
+        DefaultTableModel model = (DefaultTableModel) article_list.getModel();
+        model.setRowCount(0);
+        article_list.setAutoCreateRowSorter(true);
+        //event listener for modify
+        DefaultTableModel table = (DefaultTableModel) article_list.getModel();
+        for (int i = 0; i < arr.size(); i++) {
+            MArticles add = new MArticles();
+            add = arr.get(i);
+            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersById(DBProvider.getProvidersByIdArticle(add.getId())), DBProvider.getOriginByIdArticle(add.getId()), add.getStatus_article()};
+            table.addRow(show);
+        }
+
+    }
+
+     public void load_article_without_listener() throws SQLException {
+        ArrayList<MArticles> arr = DBArticle.getArticles();
+        DefaultTableModel model = (DefaultTableModel) article_list.getModel();
+        model.setRowCount(0);
+        article_list.setAutoCreateRowSorter(true);
+        //event listener for modify
+        DefaultTableModel table = (DefaultTableModel) article_list.getModel();
+        for (int i = 0; i < arr.size(); i++) {
+            MArticles add = new MArticles();
+            add = arr.get(i);
+            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersById(DBProvider.getProvidersByIdArticle(add.getId())), DBProvider.getOriginByIdArticle(add.getId()), add.getStatus_article()};
             table.addRow(show);
         }
 
@@ -504,43 +689,56 @@ public class VMain extends javax.swing.JFrame {
 
     
     
-    public void add_article() {
-        
-        MArticles arr = new MArticles();
-        
+    public void load_add_article_provider() {
+        ArrayList provider_array = new ArrayList<>();
+        provider_array = DBProvider.getProvidersArrayList();
+        for (int i = 0; i < provider_array.size(); i++) {
+            String to_add = (String) provider_array.get(i);
+            add_article_provider.add(to_add);
+        }
 
     }
-    
-    
-    
-    
-    
-    public static void load_add_article_provider() {
-                ArrayList provider_array = new ArrayList<>();
-                provider_array = DBProvider.getProvidersArrayList();
-                System.out.println(provider_array);
-      
+
+    public void load_add_article_type() {
+
+        add_article_type.add("Ustensile");
+        add_article_type.add("Ingredient");
 
     }
-    
-    
-    
-    
-    
+
+    public void load_add_article_status() {
+
+        add_article_status.add("Disponible");
+        add_article_status.add("Indisponible");
+
+    }
+
+    public void load_add_article_origin() {
+
+        add_article_origin.add("France");
+        add_article_origin.add("Allemagne");
+        add_article_origin.add("Espagne");
+        add_article_origin.add("Italie");
+        add_article_origin.add("Belgique");
+
+    }
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                FlatDarkLaf.setup();
+
                 new VMain().setVisible(true);
+
             }
         });
     }
-    
-    
 
     public void welcome(MLogin log) {
         welcome.setText("Bienvenue " + log.getUsername() + " !");
         if (log.getId_role() == 1) {
             statut.setText("Vous êtes connecté en tant qu'administrateur.");
+            id_user.setText(String.valueOf(log.getId()));
             manual.setText(" Vous pouvez accéder à tout les onglets. ");
             manual_user.setText(" Utilisateur : vous permet de consulter, ajouter, modifier et supprimer un employé.");
             manual_article.setText(" Article : vous permet de consulter, ajouter, modifier et supprimer un article du catalogue.");
@@ -548,12 +746,14 @@ public class VMain extends javax.swing.JFrame {
             manual_supplier.setText(" Fournisseur : Vous permet consulter, ajouter, modifier et supprimer un fournisseur.");
         } else if (log.getId_role() == 2) {
             statut.setText("Vous êtes connecté en tant que manager.");
+            id_user.setText(String.valueOf(log.getId()));
             manual_user.setText(" Utilisateur : vous permet de consulter la liste des employés.");
             manual_article.setText(" Article : vous permet de consulter, ajouter, modifier et supprimer un article du catalogue.");
             manual_command.setText(" Commande : Vous permet consulter, ajouter, modifier et supprimer une commande.");
             manual_supplier.setText(" Fournisseur : Vous permet consulter, ajouter, modifier et supprimer un fournisseur.");
         } else {
             statut.setText("Vous êtes connecté en tant qu'employée.");
+            id_user.setText(String.valueOf(log.getId()));
             manual_user.setText(" Utilisateur : vous n'y avez pas accès, merci de vous rapprocher de votre manager");
             manual_article.setText(" Article : vous permet de consulter les articles du catalogue.");
             manual_command.setText(" Commande : Vous permet consulter les commande.");
@@ -563,7 +763,11 @@ public class VMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton add_article_button;
+    private javax.swing.JLabel add_article_message;
+    private java.awt.Choice add_article_origin;
     private java.awt.Choice add_article_provider;
+    private java.awt.Choice add_article_status;
     private java.awt.Choice add_article_type;
     private java.awt.TextField add_product_name;
     private javax.swing.JPanel administration;
@@ -572,7 +776,12 @@ public class VMain extends javax.swing.JFrame {
     private java.awt.Button button_connect;
     private javax.swing.JPanel command;
     private javax.swing.JLabel error_message;
+    private javax.swing.JLabel id_user;
+    private javax.swing.JTextField input_search;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -593,6 +802,7 @@ public class VMain extends javax.swing.JFrame {
     private javax.swing.JLabel manual_command;
     private javax.swing.JLabel manual_supplier;
     private javax.swing.JLabel manual_user;
+    private javax.swing.JLabel message_search;
     private javax.swing.JPasswordField password_field;
     private javax.swing.JPanel profile;
     private javax.swing.JLabel statut;
