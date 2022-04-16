@@ -31,7 +31,6 @@ public class VDetails extends javax.swing.JFrame {
         provider_details.add(DBProvider.getProvidersById(DBProvider.getProvidersIdByIdArticle(article.getId())));
         created_by_details.setText(DBLogin.getUser(article.getId_user()));
         origin_details.add(DBProvider.getOriginByIdArticle(article.getId()));
-        System.out.println("chekIfToolOrIngredientFromDB(article.getId()"+DBArticle.chekIfToolOrIngredientFromDB(article.getId()));
         if (DBArticle.chekIfToolOrIngredientFromDB(article.getId()) == 1) {
             type_details.add("Ingrédient");
         } else {

@@ -2,9 +2,11 @@ package FilRouge.View;
 
 import FilRouge.Controlleur.DBArticle;
 import static FilRouge.Controlleur.DBArticle.getArticlesFromDB;
+import FilRouge.Controlleur.DBContact;
 import FilRouge.Controlleur.DBLogin;
 import FilRouge.Controlleur.DBProvider;
 import FilRouge.Model.MArticles;
+import FilRouge.Model.MContact;
 import FilRouge.Model.MLogin;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.event.MouseAdapter;
@@ -23,6 +25,7 @@ public class VMain extends javax.swing.JFrame {
         initComponents();
         ImageIcon icon = new ImageIcon("C:\\Users\\Patri\\Desktop\\filrouge\\projet-fil-rouge\\application\\src\\FilRouge\\Assets\\NESTI.png");
         this.setIconImage(icon.getImage());
+        tabbed_pane.removeTabAt(5);
         tabbed_pane.removeTabAt(4);
         tabbed_pane.removeTabAt(3);
         tabbed_pane.removeTabAt(2);
@@ -79,6 +82,27 @@ public class VMain extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         administration = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
+        provider = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        firstname_contact = new javax.swing.JTextField();
+        lastname_contact = new javax.swing.JTextField();
+        telephone_contact = new javax.swing.JTextField();
+        add_contact = new java.awt.Button();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        provider_list = new javax.swing.JTable();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabelname = new javax.swing.JLabel();
+        provider_name = new javax.swing.JTextField();
+        provider_adress = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
+        choice_contact = new java.awt.Choice();
+        button2 = new java.awt.Button();
+        contact_added = new javax.swing.JLabel();
+        provider_added = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -498,6 +522,167 @@ public class VMain extends javax.swing.JFrame {
 
         tabbed_pane.addTab("Admnistration", administration);
 
+        jLabel13.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel13.setText("Ajouter contact fournisseur");
+
+        jLabel14.setText("Nom");
+
+        jLabel15.setText("Prénom");
+
+        jLabel16.setText("Téléphone");
+
+        add_contact.setBackground(new java.awt.Color(51, 51, 51));
+        add_contact.setForeground(new java.awt.Color(204, 204, 204));
+        add_contact.setLabel("Ajouter contact fournisseur");
+        add_contact.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                add_contactActionPerformed(evt);
+            }
+        });
+
+        provider_list.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Nom", "Adresse", "Contact"
+            }
+        ));
+        jScrollPane2.setViewportView(provider_list);
+
+        jLabel17.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel17.setText("Ajouter fournisseur");
+
+        jLabel18.setText("Contact");
+
+        jLabelname.setText("Nom");
+
+        provider_name.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                provider_nameActionPerformed(evt);
+            }
+        });
+
+        provider_adress.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                provider_adressActionPerformed(evt);
+            }
+        });
+
+        jLabel19.setText("Adresse");
+
+        choice_contact.setBackground(new java.awt.Color(51, 51, 51));
+        choice_contact.setForeground(new java.awt.Color(204, 204, 204));
+
+        button2.setBackground(new java.awt.Color(51, 51, 51));
+        button2.setForeground(new java.awt.Color(204, 204, 204));
+        button2.setLabel("Ajouter fournisseur");
+        button2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button2ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout providerLayout = new javax.swing.GroupLayout(provider);
+        provider.setLayout(providerLayout);
+        providerLayout.setHorizontalGroup(
+            providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(providerLayout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(providerLayout.createSequentialGroup()
+                        .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(providerLayout.createSequentialGroup()
+                                .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelname, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(choice_contact, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(provider_adress)
+                                    .addComponent(provider_name)
+                                    .addComponent(button2, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
+                                    .addComponent(provider_added, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(58, 58, 58)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 722, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(providerLayout.createSequentialGroup()
+                        .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(providerLayout.createSequentialGroup()
+                                .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(contact_added, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(lastname_contact, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
+                                        .addComponent(firstname_contact)))))
+                        .addGap(28, 28, 28)
+                        .addComponent(jLabel16)
+                        .addGap(18, 18, 18)
+                        .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(add_contact, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(telephone_contact, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(53, Short.MAX_VALUE))
+        );
+        providerLayout.setVerticalGroup(
+            providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(providerLayout.createSequentialGroup()
+                .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(providerLayout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(telephone_contact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                        .addComponent(add_contact, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 518, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(providerLayout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(firstname_contact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lastname_contact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(contact_added, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelname, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(provider_name, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(providerLayout.createSequentialGroup()
+                                .addComponent(provider_adress, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(25, 25, 25))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, providerLayout.createSequentialGroup()
+                                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(81, 81, 81)))
+                        .addGroup(providerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(choice_contact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(22, 22, 22)
+                        .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(provider_added, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(48, 48, 48))
+        );
+
+        tabbed_pane.addTab("Fournisseur", provider);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -563,6 +748,7 @@ public class VMain extends javax.swing.JFrame {
                 tabbed_pane.add(profile, "Profil");
                 tabbed_pane.add(article, "Article");
                 tabbed_pane.add(command, "Commande");
+                tabbed_pane.add(provider, "Fournisseur");
                 tabbed_pane.add(administration, "Administration");
                 tabbed_pane.removeTabAt(0);
                 init_v_main();
@@ -574,6 +760,7 @@ public class VMain extends javax.swing.JFrame {
                 tabbed_pane.add(profile, "Profil");
                 tabbed_pane.add(article, "Article");
                 tabbed_pane.add(command, "Commande");
+                tabbed_pane.add(provider, "Fournisseur");
                 tabbed_pane.removeTabAt(0);
                 init_v_main();
 
@@ -602,6 +789,30 @@ public class VMain extends javax.swing.JFrame {
     private void username_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_username_fieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_username_fieldActionPerformed
+
+    private void add_contactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_contactActionPerformed
+        MContact contact = new MContact();
+        contact.setLastname(lastname_contact.getText());
+        contact.setFirstname(firstname_contact.getText());
+        contact.setTelephone(telephone_contact.getText());
+        try {
+            DBContact.addContactToDB(contact);
+        } catch (SQLException ex) {
+            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_add_contactActionPerformed
+
+    private void provider_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_provider_nameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_provider_nameActionPerformed
+
+    private void provider_adressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_provider_adressActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_provider_adressActionPerformed
+
+    private void button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_button2ActionPerformed
 
     public void load_article() throws SQLException {
         ArrayList<MArticles> arr = new ArrayList<>();
@@ -771,19 +982,31 @@ public class VMain extends javax.swing.JFrame {
     private java.awt.Choice add_article_provider;
     private java.awt.Choice add_article_status;
     private java.awt.Choice add_article_type;
+    private java.awt.Button add_contact;
     private java.awt.TextField add_product_name;
     private javax.swing.JPanel administration;
     private javax.swing.JPanel article;
     private javax.swing.JTable article_list;
+    private java.awt.Button button2;
     private java.awt.Button button_connect;
+    private java.awt.Choice choice_contact;
     private javax.swing.JPanel command;
+    private javax.swing.JLabel contact_added;
     private javax.swing.JLabel error_message;
+    private javax.swing.JTextField firstname_contact;
     private javax.swing.JLabel id_user;
     private javax.swing.JTextField input_search;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -792,12 +1015,15 @@ public class VMain extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelname;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private java.awt.Label label1;
+    private javax.swing.JTextField lastname_contact;
     private javax.swing.JPanel login;
     private javax.swing.JLabel manual;
     private javax.swing.JLabel manual_article;
@@ -807,8 +1033,14 @@ public class VMain extends javax.swing.JFrame {
     private javax.swing.JLabel message_search;
     private javax.swing.JPasswordField password_field;
     private javax.swing.JPanel profile;
+    private javax.swing.JPanel provider;
+    private javax.swing.JLabel provider_added;
+    private javax.swing.JTextField provider_adress;
+    private javax.swing.JTable provider_list;
+    private javax.swing.JTextField provider_name;
     private javax.swing.JLabel statut;
     private javax.swing.JTabbedPane tabbed_pane;
+    private javax.swing.JTextField telephone_contact;
     private javax.swing.JTextField username_field;
     private javax.swing.JLabel welcome;
     // End of variables declaration//GEN-END:variables

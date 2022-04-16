@@ -243,8 +243,6 @@ public class MArticles {
             } else {
                 art.setType("Ingrédient");
             }
-            System.out.println("art" + art.toString());
-
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -312,7 +310,6 @@ public class MArticles {
                 smt_tool.executeUpdate();
             } else {
                 MArticles art_ingredient = getArticleByNameFromDB(art.getName());
-                System.out.println(art_ingredient.getId());
                 String query_ingredient = "INSERT INTO nesti_ingredient (id_article) VALUES(?)";
                 PreparedStatement smt_ingredient = cnx.prepareStatement(query_ingredient);
                 smt_ingredient.setInt(1, art_ingredient.getId());
@@ -322,12 +319,9 @@ public class MArticles {
             PreparedStatement smt_sold_by = cnx.prepareStatement(query_sold_by);
             MArticles sold_by_id_article = getArticleByNameFromDB(art.getName());
             smt_sold_by.setInt(1, sold_by_id_article.getId());
-            System.out.println("DBProvider.getProvidersIdByName(art.getProvider())" + DBProvider.getProvidersIdByName(art.getProvider()));
             smt_sold_by.setInt(2, DBProvider.getProvidersIdByName(art.getProvider()));
-            System.out.println("art.getOrigin()" + art.getOrigin());
             smt_sold_by.setString(3, art.getOrigin());
             smt_sold_by.executeUpdate();
-            System.out.println("smt_sold_by" + smt_sold_by);
             success = (executed);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -396,7 +390,6 @@ public class MArticles {
             } else if (chekIfToolOrIngredient(id_art) == 0 && art.getType() == "Ingredient") {
                 deleteArticleFromToolToDB(art.getId());
                 MArticles art_ingredient = getArticleByNameFromDB(art.getName());
-                System.out.println(art_ingredient.getId());
                 String query_ingredient = "INSERT INTO nesti_ingredient (id_article) VALUES(?)";
                 PreparedStatement smt_ingredient = cnx.prepareStatement(query_ingredient);
                 smt_ingredient.setInt(1, art_ingredient.getId());

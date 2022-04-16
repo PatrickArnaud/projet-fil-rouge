@@ -87,4 +87,12 @@ public class DBArticle {
         int success = chekIfToolOrIngredient(id);        
         return success;
     }
+    
+    static public MArticles getArticleByNameDetailsFullDetails(String article) {
+        MArticles art = new MArticles();
+        art = MArticles.getArticleByNameDetailsFullDetails(article);
+        return art;
+        }
+
+    
 }
