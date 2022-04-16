@@ -1,13 +1,12 @@
 package FilRouge.View;
 
 import FilRouge.Controlleur.DBArticle;
-import static FilRouge.Controlleur.DBArticle.getArticles;
+import static FilRouge.Controlleur.DBArticle.getArticlesFromDB;
 import FilRouge.Controlleur.DBLogin;
 import FilRouge.Controlleur.DBProvider;
 import FilRouge.Model.MArticles;
 import FilRouge.Model.MLogin;
 import com.formdev.flatlaf.FlatDarkLaf;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import static java.lang.Integer.parseInt;
@@ -519,7 +518,7 @@ public class VMain extends javax.swing.JFrame {
     private void input_searchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_input_searchKeyReleased
 
         try {
-            load_article_search(DBArticle.searchArticles(input_search.getText()));
+            load_article_search(DBArticle.searchArticlesFromDB(input_search.getText()));
         } catch (SQLException ex) {
             Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -537,9 +536,9 @@ public class VMain extends javax.swing.JFrame {
         art.setStatus_article(add_article_status.getSelectedItem());
         art.setType(add_article_type.getSelectedItem());
         art.setOrigin(add_article_origin.getSelectedItem());
-        art.setId_user(DBProvider.getProvidersByName(add_article_provider.getSelectedItem()));
+        art.setId_user(DBProvider.getProvidersIdByName(add_article_provider.getSelectedItem()));
         try {
-            DBArticle.addArticle(art, parseInt(id_user.getText()));
+            DBArticle.addArticleToDB(art, parseInt(id_user.getText()));
         } catch (SQLException ex) {
             Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -563,32 +562,30 @@ public class VMain extends javax.swing.JFrame {
                 welcome(log);
                 tabbed_pane.add(profile, "Profil");
                 tabbed_pane.add(article, "Article");
-                load_article();
-                load_add_article_type();
-                load_add_article_origin();
-                load_add_article_status();
-                load_add_article_provider();
                 tabbed_pane.add(command, "Commande");
                 tabbed_pane.add(administration, "Administration");
                 tabbed_pane.removeTabAt(0);
+                init_v_main();
 
             } else if (log.isLogin() && log.getId_role() == 2) {
                 System.out.println("Bienvenue " + log.getUsername());
                 welcome(log);
+
                 tabbed_pane.add(profile, "Profil");
                 tabbed_pane.add(article, "Article");
-                load_article();
                 tabbed_pane.add(command, "Commande");
                 tabbed_pane.removeTabAt(0);
+                init_v_main();
 
             } else if (log.isLogin() && log.getId_role() == 3) {
                 System.out.println("Bienvenue " + log.getUsername());
                 welcome(log);
                 tabbed_pane.add(profile, "Profil");
                 tabbed_pane.add(article, "Article");
-                load_article();
                 tabbed_pane.add(command, "Commande");
                 tabbed_pane.removeTabAt(0);
+                init_v_main();
+
             } else {
                 error_message.setText("Mot de passe erroné ou nom d'utilisateur erroné");
             }
@@ -621,31 +618,31 @@ public class VMain extends javax.swing.JFrame {
                     MArticles art = new MArticles();
                     if (col == 0) {
                         //by name
-                        art = DBArticle.getArticleByNameDetails((String) article_list.getValueAt(row, col));
+                        art = DBArticle.getArticleByNameDetailsFromDB((String) article_list.getValueAt(row, col));
                     } else if (col == 1) {
                         //by brand
-                        art = DBArticle.getArticleByNameDetails((String) article_list.getValueAt(row, 0));
+                        art = DBArticle.getArticleByNameDetailsFromDB((String) article_list.getValueAt(row, 0));
                     } else if (col == 2) {
                         //by provider
-                        art = DBArticle.getArticleByNameDetails((String) article_list.getValueAt(row, 0));
+                        art = DBArticle.getArticleByNameDetailsFromDB((String) article_list.getValueAt(row, 0));
                     } else if (col == 3) {
                         //by origin
-                        art = DBArticle.getArticleByNameDetails((String) article_list.getValueAt(row, 0));
+                        art = DBArticle.getArticleByNameDetailsFromDB((String) article_list.getValueAt(row, 0));
                     } else if (col == 4) {
                         //by disponibility
-                        art = DBArticle.getArticleByNameDetails((String) article_list.getValueAt(row, 0));
+                        art = DBArticle.getArticleByNameDetailsFromDB((String) article_list.getValueAt(row, 0));
                     }
                     VDetails details = new VDetails(art, article_list);
                     details.setVisible(true);
                 }
             }
         });
-        arr = getArticles();
+        arr = getArticlesFromDB();
         DefaultTableModel table = (DefaultTableModel) article_list.getModel();
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
             add = arr.get(i);
-            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersById(DBProvider.getProvidersByIdArticle(add.getId())), DBProvider.getOriginByIdArticle(add.getId()), add.getStatus_article()};
+            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersById(DBProvider.getProvidersIdByIdArticle(add.getId())), DBProvider.getOriginByIdArticle(add.getId()), add.getStatus_article()};
             table.addRow(show);
         }
 
@@ -665,14 +662,14 @@ public class VMain extends javax.swing.JFrame {
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
             add = arr.get(i);
-            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersById(DBProvider.getProvidersByIdArticle(add.getId())), DBProvider.getOriginByIdArticle(add.getId()), add.getStatus_article()};
+            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersById(DBProvider.getProvidersIdByIdArticle(add.getId())), DBProvider.getOriginByIdArticle(add.getId()), add.getStatus_article()};
             table.addRow(show);
         }
 
     }
 
-     public void load_article_without_listener() throws SQLException {
-        ArrayList<MArticles> arr = DBArticle.getArticles();
+    public void load_article_without_listener() throws SQLException {
+        ArrayList<MArticles> arr = getArticlesFromDB();
         DefaultTableModel model = (DefaultTableModel) article_list.getModel();
         model.setRowCount(0);
         article_list.setAutoCreateRowSorter(true);
@@ -681,14 +678,12 @@ public class VMain extends javax.swing.JFrame {
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
             add = arr.get(i);
-            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersById(DBProvider.getProvidersByIdArticle(add.getId())), DBProvider.getOriginByIdArticle(add.getId()), add.getStatus_article()};
+            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersById(DBProvider.getProvidersIdByIdArticle(add.getId())), DBProvider.getOriginByIdArticle(add.getId()), add.getStatus_article()};
             table.addRow(show);
         }
 
     }
 
-    
-    
     public void load_add_article_provider() {
         ArrayList provider_array = new ArrayList<>();
         provider_array = DBProvider.getProvidersArrayList();
@@ -697,6 +692,14 @@ public class VMain extends javax.swing.JFrame {
             add_article_provider.add(to_add);
         }
 
+    }
+
+    public void init_v_main() throws SQLException {
+        load_article();
+        load_add_article_type();
+        load_add_article_origin();
+        load_add_article_status();
+        load_add_article_provider();
     }
 
     public void load_add_article_type() {
@@ -727,7 +730,6 @@ public class VMain extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 FlatDarkLaf.setup();
-
                 new VMain().setVisible(true);
 
             }

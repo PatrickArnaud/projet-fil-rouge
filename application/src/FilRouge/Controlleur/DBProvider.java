@@ -64,7 +64,7 @@ public class DBProvider {
         }
     }
 
-    static public int getProvidersByName(String name) {
+    static public int getProvidersIdByName(String name) {
         int provider = 0;
         try {
             String query = "SELECT  id_supplier  FROM nesti_supplier WHERE name_supplier= '" + name + "'";
@@ -80,7 +80,7 @@ public class DBProvider {
         }
     }
 
-    static public int getProvidersByIdArticle(int id) {
+    static public int getProvidersIdByIdArticle(int id) {
         int provider = 0;
         try {
             String query = "SELECT id_supplier FROM sold_by WHERE id_article = '" + id + "'";
@@ -95,6 +95,8 @@ public class DBProvider {
             return provider;
         }
     }
+    
+    
 
     static public String getOriginByIdArticle(int id) {
         String origin = null;

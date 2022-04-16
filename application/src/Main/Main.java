@@ -1,11 +1,14 @@
-package FilRouge.View;
+package Main;
+
+import FilRouge.Model.MArticles;
+import FilRouge.Model.MProvider;
 
 public class Main {
 
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VMain().setVisible(true);
+                MArticles.getArticleByNameDetailsFullDetails("thé");
             }
         });
     }

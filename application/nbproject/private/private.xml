@@ -8,9 +8,9 @@
             <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/Model/MProvider.java</file>
             <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/Controlleur/DBLogin.java</file>
             <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/View/VDetails.java</file>
-            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/Controlleur/DBProvider.java</file>
             <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/Model/MArticles.java</file>
-            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/Controlleur/DBConnect.java</file>
+            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/Controlleur/DBArticle.java</file>
+            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/View/Main.java</file>
         </group>
     </open-files>
 </project-private>
