@@ -52,7 +52,7 @@ public class MContact {
 
     @Override
     public String toString() {
-        return "Monsieur  " + firstname + " " + lastname + ", telephone :" + telephone + '}';
+        return id + " - Monsieur  " + firstname + " " + lastname + ", telephone :" + telephone + '}';
     }
 
     static Connection cnx = DBConnect.connect();
@@ -72,14 +72,12 @@ public class MContact {
                 contact.setFirstname(resultSet.getString(3));
                 contact.setTelephone(resultSet.getString(4));
                 arr.add(contact);
-                System.out.println(contact.toString());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             return arr;
         }
-
     }
 
     static public boolean addContact(MContact contact) throws SQLException {
@@ -89,7 +87,7 @@ public class MContact {
             PreparedStatement smt = cnx.prepareStatement(query);
             smt.setString(1, contact.getLastname());
             smt.setString(2, contact.getFirstname());
-            smt.setString(3, contact.getTelephone());           
+            smt.setString(3, contact.getTelephone());
             smt.executeUpdate();
         } catch (Exception ex) {
             ex.printStackTrace();

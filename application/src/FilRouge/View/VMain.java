@@ -711,7 +711,6 @@ public class VMain extends javax.swing.JFrame {
 
     private void input_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_input_searchActionPerformed
 
-        //ICI
     }//GEN-LAST:event_input_searchActionPerformed
 
     private void add_article_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_article_buttonActionPerformed
@@ -800,6 +799,14 @@ public class VMain extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
         }
+        contact_added.setText("Contact ajouté.");
+        choice_contact.removeAll();
+        try {
+            load_contact_provider();
+        } catch (SQLException ex) {
+            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_add_contactActionPerformed
 
     private void provider_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_provider_nameActionPerformed
@@ -819,7 +826,6 @@ public class VMain extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) article_list.getModel();
         model.setRowCount(0);
         article_list.setAutoCreateRowSorter(true);
-
         //event listener for modify
         article_list.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -868,7 +874,6 @@ public class VMain extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) article_list.getModel();
         model.setRowCount(0);
         article_list.setAutoCreateRowSorter(true);
-        //event listener for modify
         DefaultTableModel table = (DefaultTableModel) article_list.getModel();
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
@@ -953,7 +958,6 @@ public class VMain extends javax.swing.JFrame {
             public void run() {
                 FlatDarkLaf.setup();
                 new VMain().setVisible(true);
-
             }
         });
     }
