@@ -52,7 +52,7 @@ public class MContact {
 
     @Override
     public String toString() {
-        return "MContact{" + "id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", telephone=" + telephone + '}';
+        return "Monsieur  " + firstname + " " + lastname + ", telephone :" + telephone + '}';
     }
 
     static Connection cnx = DBConnect.connect();

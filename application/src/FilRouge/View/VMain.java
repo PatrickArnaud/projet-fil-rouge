@@ -905,12 +905,23 @@ public class VMain extends javax.swing.JFrame {
 
     }
 
+    public void load_contact_provider() throws SQLException {
+        ArrayList contact_array = new ArrayList<>();
+        contact_array = DBContact.getContactsFromDB();
+        for (int i = 0; i < contact_array.size(); i++) {
+            String to_add = contact_array.get(i).toString();
+            choice_contact.add(to_add);
+        }
+
+    }
+
     public void init_v_main() throws SQLException {
         load_article();
         load_add_article_type();
         load_add_article_origin();
         load_add_article_status();
         load_add_article_provider();
+        load_contact_provider();
     }
 
     public void load_add_article_type() {
