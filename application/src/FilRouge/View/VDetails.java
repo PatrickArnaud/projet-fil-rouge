@@ -28,9 +28,9 @@ public class VDetails extends javax.swing.JFrame {
         brand_details.setText(article.getBrand());
         product_created_at_details.setText(article.getCreation_date().toString());
         disponibility_details.add(article.getStatus_article());
-        provider_details.add(DBProvider.getProvidersById(DBProvider.getProvidersIdByIdArticle(article.getId())));
+        provider_details.add(DBProvider.getProvidersByIdFromDB(DBProvider.getProvidersIdByIdArticleFromDB(article.getId())));
         created_by_details.setText(DBLogin.getUser(article.getId_user()));
-        origin_details.add(DBProvider.getOriginByIdArticle(article.getId()));
+        origin_details.add(DBArticle.getOriginByIdArticleFromDB(article.getId()));
         if (DBArticle.chekIfToolOrIngredientFromDB(article.getId()) == 1) {
             type_details.add("Ingrédient");
         } else {
@@ -49,7 +49,7 @@ public class VDetails extends javax.swing.JFrame {
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
             add = arr.get(i);
-            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersById(DBProvider.getProvidersIdByIdArticle(add.getId())), DBProvider.getOriginByIdArticle(add.getId()), add.getStatus_article()};
+            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersByIdFromDB(DBProvider.getProvidersIdByIdArticleFromDB(add.getId())), DBArticle.getOriginByIdArticleFromDB(add.getId()), add.getStatus_article()};
             table.addRow(show);
         }
 
@@ -343,7 +343,7 @@ public class VDetails extends javax.swing.JFrame {
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
             add = arr.get(i);
-            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersById(DBProvider.getProvidersIdByIdArticle(add.getId())), DBProvider.getOriginByIdArticle(add.getId()), add.getStatus_article()};
+            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersByIdFromDB(DBProvider.getProvidersIdByIdArticleFromDB(add.getId())), DBArticle.getOriginByIdArticleFromDB(add.getId()), add.getStatus_article()};
             table.addRow(show);
         }
     }
@@ -379,7 +379,7 @@ public class VDetails extends javax.swing.JFrame {
 
     public void load_add_article_provider() {
         ArrayList provider_array = new ArrayList<>();
-        provider_array = DBProvider.getProvidersArrayList();
+        provider_array = DBProvider.getProvidersArrayListFromDB();
         for (int i = 0; i < provider_array.size(); i++) {
             String to_add = (String) provider_array.get(i);
             provider_details.add(to_add);

@@ -319,7 +319,7 @@ public class MArticles {
             PreparedStatement smt_sold_by = cnx.prepareStatement(query_sold_by);
             MArticles sold_by_id_article = getArticleByNameFromDB(art.getName());
             smt_sold_by.setInt(1, sold_by_id_article.getId());
-            smt_sold_by.setInt(2, DBProvider.getProvidersIdByName(art.getProvider()));
+            smt_sold_by.setInt(2, DBProvider.getProvidersIdByNameFromDB(art.getProvider()));
             smt_sold_by.setString(3, art.getOrigin());
             smt_sold_by.executeUpdate();
             success = (executed);
@@ -397,7 +397,7 @@ public class MArticles {
             }
             String query_sold_by = "UPDATE sold_by SET id_supplier = ?,  origin = ? WHERE id_article= ?";
             PreparedStatement smt_sold_by = cnx.prepareStatement(query_sold_by);
-            smt_sold_by.setInt(1, DBProvider.getProvidersIdByName(art.getProvider()));
+            smt_sold_by.setInt(1, DBProvider.getProvidersIdByNameFromDB(art.getProvider()));
             smt_sold_by.setString(2, art.getOrigin());
             smt_sold_by.setInt(3, art.getId());
             smt_sold_by.executeUpdate();
@@ -426,6 +426,22 @@ public class MArticles {
                 System.out.println("c'est un ingrédient");
             }
             return success;
+        }
+    }
+    
+     static public String getOriginByIdArticle(int id) {
+        String origin = null;
+        try {
+            String query = "SELECT origin FROM sold_by WHERE id_article = '" + id + "'";
+            Statement smt = cnx.createStatement();
+            ResultSet resultSet = smt.executeQuery(query);
+            while (resultSet.next()) {
+                origin = resultSet.getString(1);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            return origin;
         }
     }
 }

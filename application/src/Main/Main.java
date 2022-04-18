@@ -1,8 +1,6 @@
 package Main;
 
-import FilRouge.Model.MArticles;
 import FilRouge.Model.MContact;
-import FilRouge.Model.MProvider;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -8,6 +8,7 @@ import FilRouge.Controlleur.DBProvider;
 import FilRouge.Model.MArticles;
 import FilRouge.Model.MContact;
 import FilRouge.Model.MLogin;
+import FilRouge.Model.MProvider;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -100,7 +101,7 @@ public class VMain extends javax.swing.JFrame {
         provider_adress = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
         choice_contact = new java.awt.Choice();
-        button2 = new java.awt.Button();
+        add_provider_button = new java.awt.Button();
         contact_added = new javax.swing.JLabel();
         provider_added = new javax.swing.JLabel();
 
@@ -342,6 +343,7 @@ public class VMain extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        article_list.setFocusable(false);
         jScrollPane1.setViewportView(article_list);
 
         jLabel6.setText("Produit");
@@ -550,7 +552,15 @@ public class VMain extends javax.swing.JFrame {
             new String [] {
                 "Nom", "Adresse", "Contact"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(provider_list);
 
         jLabel17.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
@@ -577,12 +587,12 @@ public class VMain extends javax.swing.JFrame {
         choice_contact.setBackground(new java.awt.Color(51, 51, 51));
         choice_contact.setForeground(new java.awt.Color(204, 204, 204));
 
-        button2.setBackground(new java.awt.Color(51, 51, 51));
-        button2.setForeground(new java.awt.Color(204, 204, 204));
-        button2.setLabel("Ajouter fournisseur");
-        button2.addActionListener(new java.awt.event.ActionListener() {
+        add_provider_button.setBackground(new java.awt.Color(51, 51, 51));
+        add_provider_button.setForeground(new java.awt.Color(204, 204, 204));
+        add_provider_button.setLabel("Ajouter fournisseur");
+        add_provider_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button2ActionPerformed(evt);
+                add_provider_buttonActionPerformed(evt);
             }
         });
 
@@ -606,7 +616,7 @@ public class VMain extends javax.swing.JFrame {
                                     .addComponent(choice_contact, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(provider_adress)
                                     .addComponent(provider_name)
-                                    .addComponent(button2, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
+                                    .addComponent(add_provider_button, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
                                     .addComponent(provider_added, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(58, 58, 58)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 722, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -675,7 +685,7 @@ public class VMain extends javax.swing.JFrame {
                             .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(choice_contact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(22, 22, 22)
-                        .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(add_provider_button, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(29, 29, 29)
                         .addComponent(provider_added, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(48, 48, 48))
@@ -720,7 +730,7 @@ public class VMain extends javax.swing.JFrame {
         art.setStatus_article(add_article_status.getSelectedItem());
         art.setType(add_article_type.getSelectedItem());
         art.setOrigin(add_article_origin.getSelectedItem());
-        art.setId_user(DBProvider.getProvidersIdByName(add_article_provider.getSelectedItem()));
+        art.setId_user(DBProvider.getProvidersIdByNameFromDB(add_article_provider.getSelectedItem()));
         try {
             DBArticle.addArticleToDB(art, parseInt(id_user.getText()));
         } catch (SQLException ex) {
@@ -806,7 +816,7 @@ public class VMain extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_add_contactActionPerformed
 
     private void provider_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_provider_nameActionPerformed
@@ -817,9 +827,30 @@ public class VMain extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_provider_adressActionPerformed
 
-    private void button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_button2ActionPerformed
+    private void add_provider_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_provider_buttonActionPerformed
+
+        MProvider pro = new MProvider();
+        pro.setProvider_name(provider_name.getText());
+        pro.setProvider_adress(provider_adress.getText());
+        String to_parse = choice_contact.getSelectedItem();
+        char id_contact = to_parse.charAt(0);
+        int id_contact_to_db =  Character.getNumericValue(id_contact); 
+        System.out.println("id_contact" + id_contact_to_db);
+        pro.setProvider_id_contact(id_contact_to_db);
+        try {
+            DBProvider.addProviderToDB(pro);
+        } catch (SQLException ex) {
+            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            load_provider_without_listener();
+        } catch (SQLException ex) {
+            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        provider_added.setText("Fournisseur ajouté");
+
+    }//GEN-LAST:event_add_provider_buttonActionPerformed
 
     public void load_article() throws SQLException {
         ArrayList<MArticles> arr = new ArrayList<>();
@@ -859,7 +890,67 @@ public class VMain extends javax.swing.JFrame {
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
             add = arr.get(i);
-            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersById(DBProvider.getProvidersIdByIdArticle(add.getId())), DBProvider.getOriginByIdArticle(add.getId()), add.getStatus_article()};
+            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersByIdFromDB(DBProvider.getProvidersIdByIdArticleFromDB(add.getId())), DBArticle.getOriginByIdArticleFromDB(add.getId()), add.getStatus_article()};
+            table.addRow(show);
+        }
+
+    }
+
+    public void load_provider() throws SQLException {
+        ArrayList<MProvider> arr = new ArrayList<>();
+        DefaultTableModel model = (DefaultTableModel) provider_list.getModel();
+        model.setRowCount(0);
+        provider_list.setAutoCreateRowSorter(true);
+        //event listener for modify
+        provider_list.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int row = provider_list.getSelectedRow();
+                    int col = provider_list.getSelectedColumn();
+                    MProvider pro = new MProvider();
+                    if (col == 0) {
+                        //by name
+                        pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, col));
+                    } else if (col == 1) {
+                        //by brand
+                        pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, 0));
+                    } else if (col == 2) {
+                        //by provider
+                        pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, 0));
+                    } else if (col == 3) {
+                        //by origin
+                        pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, 0));
+                    } else if (col == 4) {
+                        //by disponibility
+                        pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, 0));
+                    }
+                    VDetailsProvider details = new VDetailsProvider(pro, provider_list);
+                    details.setVisible(true);
+                }
+            }
+        });
+        arr = DBProvider.getProvidersFromDB();
+        DefaultTableModel table = (DefaultTableModel) provider_list.getModel();
+        for (int i = 0; i < arr.size(); i++) {
+            MProvider add = new MProvider();
+            add = arr.get(i);
+            String show[] = {add.getProvider_name(), add.getProvider_adress(), DBProvider.getProvidersByIdFromDB(add.getProvider_id_contact())};
+            table.addRow(show);
+        }
+
+    }
+
+    public void load_provider_without_listener() throws SQLException {
+        ArrayList<MProvider> arr = new ArrayList<>();
+        DefaultTableModel model = (DefaultTableModel) provider_list.getModel();
+        model.setRowCount(0);
+        provider_list.setAutoCreateRowSorter(true);
+        arr = DBProvider.getProvidersFromDB();
+        DefaultTableModel table = (DefaultTableModel) provider_list.getModel();
+        for (int i = 0; i < arr.size(); i++) {
+            MProvider add = new MProvider();
+            add = arr.get(i);
+            String show[] = {add.getProvider_name(), add.getProvider_adress(), DBProvider.getProvidersByIdFromDB(add.getProvider_id_contact())};
             table.addRow(show);
         }
 
@@ -878,7 +969,7 @@ public class VMain extends javax.swing.JFrame {
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
             add = arr.get(i);
-            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersById(DBProvider.getProvidersIdByIdArticle(add.getId())), DBProvider.getOriginByIdArticle(add.getId()), add.getStatus_article()};
+            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersByIdFromDB(DBProvider.getProvidersIdByIdArticleFromDB(add.getId())), DBArticle.getOriginByIdArticleFromDB(add.getId()), add.getStatus_article()};
             table.addRow(show);
         }
 
@@ -894,7 +985,7 @@ public class VMain extends javax.swing.JFrame {
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
             add = arr.get(i);
-            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersById(DBProvider.getProvidersIdByIdArticle(add.getId())), DBProvider.getOriginByIdArticle(add.getId()), add.getStatus_article()};
+            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersByIdFromDB(DBProvider.getProvidersIdByIdArticleFromDB(add.getId())), DBArticle.getOriginByIdArticleFromDB(add.getId()), add.getStatus_article()};
             table.addRow(show);
         }
 
@@ -902,7 +993,7 @@ public class VMain extends javax.swing.JFrame {
 
     public void load_add_article_provider() {
         ArrayList provider_array = new ArrayList<>();
-        provider_array = DBProvider.getProvidersArrayList();
+        provider_array = DBProvider.getProvidersArrayListFromDB();
         for (int i = 0; i < provider_array.size(); i++) {
             String to_add = (String) provider_array.get(i);
             add_article_provider.add(to_add);
@@ -922,6 +1013,7 @@ public class VMain extends javax.swing.JFrame {
 
     public void init_v_main() throws SQLException {
         load_article();
+        load_provider();
         load_add_article_type();
         load_add_article_origin();
         load_add_article_status();
@@ -999,10 +1091,10 @@ public class VMain extends javax.swing.JFrame {
     private java.awt.Choice add_article_type;
     private java.awt.Button add_contact;
     private java.awt.TextField add_product_name;
+    private java.awt.Button add_provider_button;
     private javax.swing.JPanel administration;
     private javax.swing.JPanel article;
     private javax.swing.JTable article_list;
-    private java.awt.Button button2;
     private java.awt.Button button_connect;
     private java.awt.Choice choice_contact;
     private javax.swing.JPanel command;
