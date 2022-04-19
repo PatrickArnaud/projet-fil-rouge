@@ -4,7 +4,6 @@ import FilRouge.Controlleur.DBArticle;
 import FilRouge.Controlleur.DBLogin;
 import FilRouge.Controlleur.DBProvider;
 import FilRouge.Model.MArticles;
-import com.formdev.flatlaf.FlatDarkLaf;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -19,7 +18,7 @@ public class VDetails extends javax.swing.JFrame {
 
     public VDetails(MArticles article, JTable jtable) {
         this.jtable = jtable;
-        FlatDarkLaf.setup();
+       // FlatDarkLaf.setup();
         initComponents();
         System.out.println(article.toString());
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

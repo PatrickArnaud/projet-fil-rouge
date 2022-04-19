@@ -23,7 +23,7 @@ public class DBProvider {
 
     static public MProvider getProviderByNameFromDB(String name) {
         MProvider pro = new MProvider();
-        pro = MProvider.getAProviderByName(name);
+        pro = MProvider.getProviderByName(name);
         return pro;
     }
 
@@ -56,6 +56,12 @@ public class DBProvider {
     static public boolean addProviderToDB(MProvider pro) throws SQLException {
         boolean success = false;
         MProvider.addProvider(pro);
+        return success;
+    }
+
+    static public boolean updateProvider(MProvider pro) throws SQLException {
+        boolean success = false;
+        MProvider.updateProvider(pro);
         return success;
     }
 

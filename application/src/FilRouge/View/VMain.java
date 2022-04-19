@@ -834,8 +834,7 @@ public class VMain extends javax.swing.JFrame {
         pro.setProvider_adress(provider_adress.getText());
         String to_parse = choice_contact.getSelectedItem();
         char id_contact = to_parse.charAt(0);
-        int id_contact_to_db =  Character.getNumericValue(id_contact); 
-        System.out.println("id_contact" + id_contact_to_db);
+        int id_contact_to_db = Character.getNumericValue(id_contact);
         pro.setProvider_id_contact(id_contact_to_db);
         try {
             DBProvider.addProviderToDB(pro);
@@ -905,27 +904,29 @@ public class VMain extends javax.swing.JFrame {
         provider_list.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    int row = provider_list.getSelectedRow();
-                    int col = provider_list.getSelectedColumn();
-                    MProvider pro = new MProvider();
-                    if (col == 0) {
-                        //by name
-                        pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, col));
-                    } else if (col == 1) {
-                        //by brand
-                        pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, 0));
-                    } else if (col == 2) {
-                        //by provider
-                        pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, 0));
-                    } else if (col == 3) {
-                        //by origin
-                        pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, 0));
-                    } else if (col == 4) {
-                        //by disponibility
-                        pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, 0));
+                    try {
+                        int row = provider_list.getSelectedRow();
+                        int col = provider_list.getSelectedColumn();
+                        MProvider pro = new MProvider();
+                        if (col == 0) {
+                            //by name
+                            System.out.println(provider_list.getValueAt(row, col));
+                            pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, col));
+                        } else if (col == 1) {
+                            //by brand
+                            pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, 0));
+                        } else if (col == 2) {
+                            //by provider
+                            pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, 0));
+                        } else if (col == 3) {
+                            //by origin
+                            pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, 0));
+                        }
+                        VDetailsProvider details_provider = new VDetailsProvider(pro, provider_list);
+                        details_provider.setVisible(true);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    VDetailsProvider details = new VDetailsProvider(pro, provider_list);
-                    details.setVisible(true);
                 }
             }
         });

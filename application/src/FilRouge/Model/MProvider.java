@@ -1,7 +1,6 @@
 package FilRouge.Model;
 
-import static FilRouge.Controlleur.DBArticle.getArticleByNameFromDB;
-import FilRouge.Controlleur.DBProvider;
+
 import static FilRouge.Model.MArticles.cnx;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -99,11 +98,10 @@ public class MProvider {
 
     }
 
-    static public MProvider getAProviderByName(String name) {
+    static public MProvider getProviderByName(String name) {
         MProvider pro = new MProvider();
-
         try {
-            String query = "SELECT  id_supplier, address_supplier , name_supplier, id_contact FROM nesti_supplier WHERE id_supplier ='" + name + "'";
+            String query = "SELECT  id_supplier, address_supplier , name_supplier, id_contact FROM nesti_supplier WHERE name_supplier ='" + name + "'";
             Statement smt = cnx.createStatement();
             ResultSet resultSet = smt.executeQuery(query);
             while (resultSet.next()) {
@@ -120,7 +118,7 @@ public class MProvider {
         }
 
     }
-    
+
     static public ArrayList getProvidersArrayList() {
         ArrayList<String> provider_table = new ArrayList<>();
         try {
@@ -137,8 +135,8 @@ public class MProvider {
         }
 
     }
-    
-     static public String getProvidersNameById (int id) {
+
+    static public String getProvidersNameById(int id) {
         String provider = null;
         try {
             String query = "SELECT name_supplier  FROM nesti_supplier WHERE id_supplier = '" + id + "'";
@@ -154,7 +152,7 @@ public class MProvider {
         }
     }
 
- static public int getProvidersIdByName(String name) {
+    static public int getProvidersIdByName(String name) {
         int provider = 0;
         try {
             String query = "SELECT  id_supplier  FROM nesti_supplier WHERE name_supplier= '" + name + "'";
@@ -169,8 +167,8 @@ public class MProvider {
             return provider;
         }
     }
- 
- static public int getProvidersIdByIdArticle(int id) {
+
+    static public int getProvidersIdByIdArticle(int id) {
         int provider = 0;
         try {
             String query = "SELECT id_supplier FROM sold_by WHERE id_article = '" + id + "'";
@@ -185,9 +183,8 @@ public class MProvider {
             return provider;
         }
     }
-    
-    
- static public boolean addProvider(MProvider pro) throws SQLException {
+
+    static public boolean addProvider(MProvider pro) throws SQLException {
         boolean success = false;
         try {
             String query = "INSERT INTO nesti_supplier (address_supplier,name_supplier,id_contact) VALUES(?,?,?)";
@@ -195,10 +192,28 @@ public class MProvider {
             smt.setString(1, pro.getProvider_adress());
             smt.setString(2, pro.getProvider_name());
             smt.setInt(3, pro.getProvider_id_contact());
-            smt.executeUpdate();           
+            smt.executeUpdate();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return success;
-    } 
+    }
+
+    static public boolean updateProvider(MProvider pro) throws SQLException {
+        boolean success = false;
+        try {
+            String query = "UPDATE nesti_supplier SET name_supplier = ?, address_supplier =  ?, id_contact = ? WHERE id_supplier= ?";
+            PreparedStatement smt = cnx.prepareStatement(query);
+            smt.setString(1, pro.getProvider_name());
+            smt.setString(2, pro.getProvider_adress());
+            smt.setInt(3, pro.getProvider_id_contact());
+            smt.setInt(4, pro.getProvider_id());
+            smt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return success;
+    }
+
 }

@@ -80,6 +80,26 @@ public class MContact {
         }
     }
 
+    static public MContact getContactById(int id) throws SQLException {
+        MContact contact = null;
+        try {
+            String query = "SELECT  id_contact, name_contact , firstname_contact , tel_contact FROM nesti_contact WHERE id_contact = " + id + "";
+            Statement smt = cnx.createStatement();
+            ResultSet resultSet = smt.executeQuery(query);
+            while (resultSet.next()) {
+                contact = new MContact();
+                contact.setId(resultSet.getInt(1));
+                contact.setLastname(resultSet.getString(2));
+                contact.setFirstname(resultSet.getString(3));
+                contact.setTelephone(resultSet.getString(4));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            return contact;
+        }
+    }
+
     static public boolean addContact(MContact contact) throws SQLException {
         boolean success = false;
         try {
