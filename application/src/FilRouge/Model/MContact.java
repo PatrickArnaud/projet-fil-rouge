@@ -52,7 +52,7 @@ public class MContact {
 
     @Override
     public String toString() {
-        return id + " - Monsieur  " + firstname + " " + lastname + ", telephone :" + telephone + '}';
+        return id + "- Monsieur  " + firstname + " " + lastname + ", telephone :" + telephone + '}';
     }
 
     static Connection cnx = DBConnect.connect();
@@ -114,4 +114,34 @@ public class MContact {
         }
         return success;
     }
+
+    static public boolean deleteContactById(int id) throws SQLException {
+        boolean success = false;
+        try {
+            String query = "DELETE FROM nesti_contact WHERE id_contact ='" + id + "'";
+            Statement smt = cnx.prepareStatement(query);
+            smt.executeUpdate(query);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return success;
+    }
+    
+    
+    static public boolean updateContact(MContact contact) throws SQLException {
+        boolean success = false;
+        try {
+            String query = "UPDATE nesti_contact SET name_contact = ?, firstname_contact =  ?, tel_contact = ? WHERE id_contact= ?";
+            PreparedStatement smt = cnx.prepareStatement(query);
+            smt.setString(1, contact.getFirstname());
+            smt.setString(2, contact.getLastname());
+            smt.setString(3, contact.getTelephone());
+            smt.setInt(4, contact.getId());
+            smt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return success;
+    }
+    
 }

@@ -25,4 +25,16 @@ public class DBContact {
         return success;
     }
 
+    static public boolean deleteContactByIdToDB(int id) throws SQLException {
+        boolean success = false;
+        MContact.deleteContactById(id);
+        return success;
+    }
+
+    static public boolean updateContactToDB(MContact contact) throws SQLException {
+        boolean success = false;
+        MContact.updateContact(contact);
+        return success;
+    }
+
 }

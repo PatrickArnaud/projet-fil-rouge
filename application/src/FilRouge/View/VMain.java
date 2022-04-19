@@ -833,8 +833,8 @@ public class VMain extends javax.swing.JFrame {
         pro.setProvider_name(provider_name.getText());
         pro.setProvider_adress(provider_adress.getText());
         String to_parse = choice_contact.getSelectedItem();
-        char id_contact = to_parse.charAt(0);
-        int id_contact_to_db = Character.getNumericValue(id_contact);
+        String id_contact[] = to_parse.split("-");
+        int id_contact_to_db = parseInt(id_contact[0]);
         pro.setProvider_id_contact(id_contact_to_db);
         try {
             DBProvider.addProviderToDB(pro);
@@ -922,7 +922,7 @@ public class VMain extends javax.swing.JFrame {
                             //by origin
                             pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, 0));
                         }
-                        VDetailsProvider details_provider = new VDetailsProvider(pro, provider_list);
+                        VDetailsProvider details_provider = new VDetailsProvider(pro, provider_list, choice_contact);
                         details_provider.setVisible(true);
                     } catch (SQLException ex) {
                         Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);

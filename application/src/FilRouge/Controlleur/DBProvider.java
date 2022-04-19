@@ -65,4 +65,10 @@ public class DBProvider {
         return success;
     }
 
+    static public boolean deleteProviderByIdToDB(int id_provider) {
+        boolean success = false;
+        MProvider.deleteProviderById(id_provider);
+        return success;
+    }
+
 }

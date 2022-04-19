@@ -216,4 +216,17 @@ public class MProvider {
         return success;
     }
 
+    static public boolean deleteProviderById(int id_provider) {
+        boolean success = false;
+        try {
+            String query = "DELETE FROM nesti_supplier WHERE id_supplier ='" + id_provider + "'";
+            Statement smt = cnx.createStatement();
+            smt.executeUpdate(query);            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            return success;
+        }
+    }
+    
 }

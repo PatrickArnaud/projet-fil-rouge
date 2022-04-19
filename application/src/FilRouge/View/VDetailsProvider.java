@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package FilRouge.View;
 
 import FilRouge.Controlleur.DBContact;
 import FilRouge.Controlleur.DBProvider;
 import FilRouge.Model.MContact;
 import FilRouge.Model.MProvider;
+import java.awt.Choice;
 import static java.lang.Integer.parseInt;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,32 +17,55 @@ import javax.swing.table.DefaultTableModel;
 public class VDetailsProvider extends javax.swing.JFrame {
 
     JTable jtable;
+    Choice choice_contact;
 
-    public VDetailsProvider(MProvider pro, JTable jtable) throws SQLException {
+    public VDetailsProvider(MProvider pro, JTable jtable, Choice choice_contact) throws SQLException {
         this.jtable = jtable;
+        this.choice_contact = choice_contact;
         initComponents();
         MContact cont = new MContact();
-        cont = DBContact.getContactByIdFromDB(pro.getProvider_id_contact());
+
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         int id = pro.getProvider_id();
         String tostr = String.valueOf(id);
         provider_id_text.setText(tostr);
         provider_name.setText(pro.getProvider_name());
         provider_adress.setText(pro.getProvider_adress());
-        String contact = cont.toString();
-        provider_contact_choice.add(contact);
-        contact_name.setText(cont.getLastname());
-        provider_contact_firstname.setText(cont.getFirstname());
-        provider_contact_phone.setText(cont.getTelephone());
+        cont = DBContact.getContactByIdFromDB(pro.getProvider_id_contact());
+
+        if (cont != null) {
+            String contact = cont.toString();
+            provider_contact_choice.add(contact);
+            int id_cont = cont.getId();
+            String tostr_con = String.valueOf(id_cont);
+            id_contact_text.setText(tostr_con);
+            contact_name.setText(cont.getLastname());
+            provider_contact_firstname.setText(cont.getFirstname());
+            provider_contact_phone.setText(cont.getTelephone());
+        } else {
+            provider_contact_choice.add("pas de contact renseigné");
+            id_contact_text.setText("");
+            contact_name.setText("");
+            provider_contact_firstname.setText("");
+            provider_contact_phone.setText("");
+            modify_provider_contact.setVisible(false);
+            delete_provider_contact.setVisible(false);
+        }
+
         load_contact_provider();
     }
 
+    
+
     public void load_contact_provider() throws SQLException {
+        provider_contact_choice.removeAll();
+        choice_contact.removeAll();
         ArrayList contact_array = new ArrayList<>();
         contact_array = DBContact.getContactsFromDB();
         for (int i = 0; i < contact_array.size(); i++) {
             String to_add = contact_array.get(i).toString();
             provider_contact_choice.add(to_add);
+            choice_contact.add(to_add);
         }
     }
 
@@ -97,6 +116,8 @@ public class VDetailsProvider extends javax.swing.JFrame {
         modify_provider_label = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         provider_id_text = new java.awt.Label();
+        jLabel10 = new javax.swing.JLabel();
+        id_contact_text = new java.awt.Label();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -131,6 +152,11 @@ public class VDetailsProvider extends javax.swing.JFrame {
         delete_provider.setBackground(new java.awt.Color(51, 51, 51));
         delete_provider.setForeground(new java.awt.Color(204, 204, 204));
         delete_provider.setText("Supprimer");
+        delete_provider.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delete_providerActionPerformed(evt);
+            }
+        });
 
         modify_provider_contact.setBackground(new java.awt.Color(51, 51, 51));
         modify_provider_contact.setForeground(new java.awt.Color(204, 204, 204));
@@ -196,6 +222,10 @@ public class VDetailsProvider extends javax.swing.JFrame {
 
         provider_id_text.setForeground(new java.awt.Color(204, 204, 204));
 
+        jLabel10.setText("n°");
+
+        id_contact_text.setForeground(new java.awt.Color(204, 204, 204));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -229,7 +259,6 @@ public class VDetailsProvider extends javax.swing.JFrame {
                         .addComponent(provider_id_text, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(206, 206, 206)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 593, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -247,8 +276,14 @@ public class VDetailsProvider extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(delete_provider_contact, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(provider_contact_phone, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(modify_contact_provider_label, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(95, 95, 95))
+                            .addComponent(modify_contact_provider_label, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(38, 38, 38)
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(id_contact_text, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(213, 213, 213))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(36, 36, 36)
@@ -269,16 +304,22 @@ public class VDetailsProvider extends javax.swing.JFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(35, 35, 35)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel9))
-                                .addGap(18, 18, 18))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
+                                .addGap(13, 13, 13)
                                 .addComponent(provider_id_text, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(36, 36, 36)))
+                                .addGap(36, 36, 36))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(35, 35, 35)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel9)
+                                            .addComponent(jLabel10)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(60, 60, 60)
+                                        .addComponent(id_contact_text, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(contact_name, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -342,6 +383,22 @@ public class VDetailsProvider extends javax.swing.JFrame {
 
     private void modify_provider_contactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modify_provider_contactActionPerformed
 
+        MContact contact = new MContact();
+        contact.setFirstname(contact_name.getText());
+        contact.setLastname(provider_contact_firstname.getText());
+        contact.setId(parseInt(id_contact_text.getText()));
+        contact.setTelephone(provider_contact_phone.getText());
+        try {
+            DBContact.updateContactToDB(contact);
+        } catch (SQLException ex) {
+            Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            load_contact_provider();
+        } catch (SQLException ex) {
+            Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
 
     }//GEN-LAST:event_modify_provider_contactActionPerformed
 
@@ -363,10 +420,9 @@ public class VDetailsProvider extends javax.swing.JFrame {
         pro.setProvider_name(provider_name.getText());
         pro.setProvider_adress(provider_adress.getText());
         String to_parse = provider_contact_choice.getSelectedItem();
-        char id_contact = to_parse.charAt(0);
-        int id_contact_to_db = Character.getNumericValue(id_contact);
+        String[] id_contact = to_parse.split("-");
+        int id_contact_to_db = parseInt(id_contact[0]);
         pro.setProvider_id_contact(id_contact_to_db);
-        System.out.println("pro" + pro.toString());//manque id provider
         try {
             DBProvider.updateProvider(pro);
         } catch (SQLException ex) {
@@ -377,13 +433,39 @@ public class VDetailsProvider extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
-      reload_provider();
+        reload_provider();
         modify_provider_label.setText("Modification effectuée");
     }//GEN-LAST:event_modify_providerActionPerformed
 
     private void delete_provider_contactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_provider_contactActionPerformed
-        // TODO add your handling code here:
+        reload_provider();
+        try {
+            System.out.println("id_contact_text.getText()" + id_contact_text.getText());
+            DBContact.deleteContactByIdToDB(parseInt(id_contact_text.getText()));
+        } catch (SQLException ex) {
+            Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        id_contact_text.setText("");
+        contact_name.setText("");
+        provider_contact_firstname.setText("");
+        provider_contact_phone.setText("");
+        modify_contact_provider_label.setText("Suppression effectuée");
+
     }//GEN-LAST:event_delete_provider_contactActionPerformed
+
+    private void delete_providerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_providerActionPerformed
+        DBProvider.deleteProviderByIdToDB(parseInt(provider_id_text.getText()));
+        System.out.println("provider_id_text.getText()" + provider_id_text.getText());
+        reload_provider();
+        contact_name.setText("");
+        provider_id_text.setText("");
+        provider_name.setText("");
+        provider_adress.setText("");
+        provider_contact_choice.removeAll();
+        provider_contact_firstname.setText("");
+        provider_contact_phone.setText("");
+        modify_provider_label.setText("Suppression effectuée");
+    }//GEN-LAST:event_delete_providerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -424,7 +506,9 @@ public class VDetailsProvider extends javax.swing.JFrame {
     private java.awt.TextField contact_name;
     private javax.swing.JButton delete_provider;
     private javax.swing.JButton delete_provider_contact;
+    private java.awt.Label id_contact_text;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

@@ -337,7 +337,6 @@ public class VDetails extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jtable.getModel();
         model.setRowCount(0);
         jtable.setAutoCreateRowSorter(true);
-        //event listener for modify
         DefaultTableModel table = (DefaultTableModel) jtable.getModel();
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
