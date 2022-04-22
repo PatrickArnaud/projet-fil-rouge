@@ -52,8 +52,13 @@ public class MContact {
 
     @Override
     public String toString() {
-        return id + "- Monsieur  " + firstname + " " + lastname + ", telephone :" + telephone + '}';
+        return id + "- " + firstname + " " + lastname + ", telephone :" + telephone + '}';
     }
+    
+    public String toString2() {
+        return  firstname + " " + lastname ;
+    }
+
 
     static Connection cnx = DBConnect.connect();
 

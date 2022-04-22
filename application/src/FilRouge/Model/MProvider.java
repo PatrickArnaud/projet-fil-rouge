@@ -1,7 +1,8 @@
 package FilRouge.Model;
 
 
-import static FilRouge.Model.MArticles.cnx;
+import FilRouge.Controlleur.DBConnect;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +10,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class MProvider {
+
+        static Connection cnx = DBConnect.connect();
 
     int provider_id;
     int provider_id_contact;

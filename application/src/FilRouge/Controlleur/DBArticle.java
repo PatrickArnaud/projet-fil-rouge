@@ -1,6 +1,5 @@
 package FilRouge.Controlleur;
 
-import static FilRouge.Controlleur.DBProvider.cnx;
 import FilRouge.Model.MArticles;
 import static FilRouge.Model.MArticles.addArticle;
 import static FilRouge.Model.MArticles.chekIfToolOrIngredient;
@@ -10,15 +9,11 @@ import static FilRouge.Model.MArticles.deleteArticleFromTool;
 import static FilRouge.Model.MArticles.getArticleByName;
 import static FilRouge.Model.MArticles.getArticleByNameDetails;
 import static FilRouge.Model.MArticles.updateArticle;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 public class DBArticle {
 
-    static Connection cnx = DBConnect.connect();
 
     static public ArrayList getArticlesFromDB() throws SQLException {
         MArticles art = new MArticles();
@@ -100,8 +95,6 @@ public class DBArticle {
      static public String getOriginByIdArticleFromDB(int id) {
         String origin = null;
         origin = MArticles.getOriginByIdArticle(id);
-            return origin;
-        
+            return origin;        
     }
-    
-}
+ }

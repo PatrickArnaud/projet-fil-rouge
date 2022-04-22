@@ -53,11 +53,21 @@ public class VDetailsProvider extends javax.swing.JFrame {
         }
 
         load_contact_provider();
+
     }
 
-    
-
     public void load_contact_provider() throws SQLException {
+
+        ArrayList contact_array = new ArrayList<>();
+        contact_array = DBContact.getContactsFromDB();
+        for (int i = 0; i < contact_array.size(); i++) {
+            String to_add = contact_array.get(i).toString();
+            provider_contact_choice.add(to_add);
+            choice_contact.add(to_add);
+        }
+    }
+
+    public void reload_contact_provider() throws SQLException {
         provider_contact_choice.removeAll();
         choice_contact.removeAll();
         ArrayList contact_array = new ArrayList<>();
@@ -69,7 +79,7 @@ public class VDetailsProvider extends javax.swing.JFrame {
         }
     }
 
-    private void reload_provider() {
+    private void reload_provider() throws SQLException {
 
         ArrayList<MProvider> arr = new ArrayList();
         arr = DBProvider.getProvidersFromDB();
@@ -80,7 +90,8 @@ public class VDetailsProvider extends javax.swing.JFrame {
         for (int i = 0; i < arr.size(); i++) {
             MProvider add = new MProvider();
             add = arr.get(i);
-            String show[] = {add.getProvider_name(), add.getProvider_adress(), DBProvider.getProvidersByIdFromDB(add.getProvider_id_contact())};
+            System.out.println("DBContact.getContactByIdFromDB(add.getProvider_id_contact()).toString()"+DBContact.getContactByIdFromDB(add.getProvider_id_contact()).toString());
+            String show[] = {add.getProvider_name(), add.getProvider_adress(), DBContact.getContactByIdFromDB(add.getProvider_id_contact()).toString()};
             table.addRow(show);
         }
     }
@@ -394,11 +405,14 @@ public class VDetailsProvider extends javax.swing.JFrame {
             Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            load_contact_provider();
+            reload_contact_provider();
         } catch (SQLException ex) {
             Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        contact_name.setText(contact.getLastname());
+        provider_contact_firstname.setText(contact.getFirstname());
+        id_contact_text.setText(String.valueOf(contact.getId()));
+        provider_contact_phone.setText(contact.getTelephone());
 
     }//GEN-LAST:event_modify_provider_contactActionPerformed
 
@@ -429,16 +443,24 @@ public class VDetailsProvider extends javax.swing.JFrame {
             Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            load_contact_provider();
+            reload_contact_provider();
         } catch (SQLException ex) {
             Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
         }
-        reload_provider();
+        try {
+            reload_provider();
+        } catch (SQLException ex) {
+            Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
+        }
         modify_provider_label.setText("Modification effectuée");
     }//GEN-LAST:event_modify_providerActionPerformed
 
     private void delete_provider_contactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_provider_contactActionPerformed
-        reload_provider();
+        try {
+            reload_provider();
+        } catch (SQLException ex) {
+            Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try {
             System.out.println("id_contact_text.getText()" + id_contact_text.getText());
             DBContact.deleteContactByIdToDB(parseInt(id_contact_text.getText()));
@@ -455,8 +477,11 @@ public class VDetailsProvider extends javax.swing.JFrame {
 
     private void delete_providerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_providerActionPerformed
         DBProvider.deleteProviderByIdToDB(parseInt(provider_id_text.getText()));
-        System.out.println("provider_id_text.getText()" + provider_id_text.getText());
-        reload_provider();
+        try {
+            reload_provider();
+        } catch (SQLException ex) {
+            Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
+        }
         contact_name.setText("");
         provider_id_text.setText("");
         provider_name.setText("");

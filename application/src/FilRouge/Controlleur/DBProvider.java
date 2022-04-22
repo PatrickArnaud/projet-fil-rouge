@@ -1,13 +1,11 @@
 package FilRouge.Controlleur;
 
 import FilRouge.Model.MProvider;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DBProvider {
 
-    static Connection cnx = DBConnect.connect();
 
     static public ArrayList getProvidersFromDB() {
         ArrayList<MProvider> arr = new ArrayList<>();

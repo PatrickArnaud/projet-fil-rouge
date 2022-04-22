@@ -5,10 +5,12 @@ import static FilRouge.Controlleur.DBArticle.getArticlesFromDB;
 import FilRouge.Controlleur.DBContact;
 import FilRouge.Controlleur.DBLogin;
 import FilRouge.Controlleur.DBProvider;
+import FilRouge.Controlleur.DBUser;
 import FilRouge.Model.MArticles;
 import FilRouge.Model.MContact;
 import FilRouge.Model.MLogin;
 import FilRouge.Model.MProvider;
+import FilRouge.Model.MUser;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -81,8 +83,21 @@ public class VMain extends javax.swing.JFrame {
         message_search = new javax.swing.JLabel();
         command = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
         administration = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        username_toadd = new javax.swing.JTextField();
+        user_password_toadd = new javax.swing.JTextField();
+        role_toadd = new javax.swing.JComboBox<>();
+        add_user_btn = new java.awt.Button();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        user_list = new javax.swing.JTable();
+        jLabel23 = new javax.swing.JLabel();
+        user_choice_to_delete = new java.awt.Choice();
+        delete_user_btn = new java.awt.Button();
         provider = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -481,45 +496,166 @@ public class VMain extends javax.swing.JFrame {
         tabbed_pane.addTab("Article", article);
 
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel4.setText("Passer une commande :");
+        jLabel4.setText("Suivi de commande :");
+
+        jLabel24.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel24.setText("Passer une commande :");
 
         javax.swing.GroupLayout commandLayout = new javax.swing.GroupLayout(command);
         command.setLayout(commandLayout);
         commandLayout.setHorizontalGroup(
             commandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(commandLayout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, commandLayout.createSequentialGroup()
+                .addContainerGap(622, Short.MAX_VALUE)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1056, Short.MAX_VALUE))
+                .addGap(440, 440, 440))
+            .addGroup(commandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(commandLayout.createSequentialGroup()
+                    .addGap(16, 16, 16)
+                    .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(1046, Short.MAX_VALUE)))
         );
         commandLayout.setVerticalGroup(
             commandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(commandLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(16, 16, 16)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(686, Short.MAX_VALUE))
+                .addContainerGap(676, Short.MAX_VALUE))
+            .addGroup(commandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(commandLayout.createSequentialGroup()
+                    .addGap(16, 16, 16)
+                    .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(676, Short.MAX_VALUE)))
         );
 
         tabbed_pane.addTab("Commande", command);
 
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel5.setText("Ajouter employée :");
+        jLabel5.setText("Ajouter utlisateur :");
+
+        jLabel20.setText("Role");
+
+        jLabel21.setText("Nom utilisateur");
+
+        jLabel22.setText("Mot de passe");
+
+        username_toadd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                username_toaddActionPerformed(evt);
+            }
+        });
+
+        user_password_toadd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                user_password_toaddActionPerformed(evt);
+            }
+        });
+
+        role_toadd.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Super Admin", "Administrateur", "Employé", " ", " " }));
+
+        add_user_btn.setBackground(new java.awt.Color(51, 51, 51));
+        add_user_btn.setForeground(new java.awt.Color(204, 204, 204));
+        add_user_btn.setLabel("Ajouter utilisateur");
+        add_user_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                add_user_btnActionPerformed(evt);
+            }
+        });
+
+        user_list.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Utilisateur", "Mot de passe", "Role"
+            }
+        ));
+        jScrollPane3.setViewportView(user_list);
+
+        jLabel23.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel23.setText("Supprimer utlisateur :");
+
+        user_choice_to_delete.setBackground(new java.awt.Color(51, 51, 51));
+        user_choice_to_delete.setForeground(new java.awt.Color(204, 204, 204));
+
+        delete_user_btn.setBackground(new java.awt.Color(51, 51, 51));
+        delete_user_btn.setForeground(new java.awt.Color(204, 204, 204));
+        delete_user_btn.setLabel("Supprimer utilisateur");
+        delete_user_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delete_user_btnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout administrationLayout = new javax.swing.GroupLayout(administration);
         administration.setLayout(administrationLayout);
         administrationLayout.setHorizontalGroup(
             administrationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(administrationLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 492, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(866, Short.MAX_VALUE))
+                .addGroup(administrationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(administrationLayout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(administrationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(administrationLayout.createSequentialGroup()
+                                .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(username_toadd, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 492, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(administrationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(administrationLayout.createSequentialGroup()
+                                    .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(user_password_toadd, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, administrationLayout.createSequentialGroup()
+                                    .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addGroup(administrationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(role_toadd, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(add_user_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 492, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(administrationLayout.createSequentialGroup()
+                        .addGap(167, 167, 167)
+                        .addGroup(administrationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(user_choice_to_delete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(delete_user_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))))
+                .addGap(44, 44, 44)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 771, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         administrationLayout.setVerticalGroup(
             administrationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(administrationLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(686, Short.MAX_VALUE))
+                .addGroup(administrationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(administrationLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(administrationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(username_toadd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(37, 37, 37)
+                        .addGroup(administrationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(user_password_toadd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(37, 37, 37)
+                        .addGroup(administrationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(role_toadd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(45, 45, 45)
+                        .addComponent(add_user_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
+                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(user_choice_to_delete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(59, 59, 59)
+                        .addComponent(delete_user_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(administrationLayout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 654, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         tabbed_pane.addTab("Admnistration", administration);
@@ -698,9 +834,8 @@ public class VMain extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tabbed_pane, javax.swing.GroupLayout.PREFERRED_SIZE, 1366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(tabbed_pane, javax.swing.GroupLayout.PREFERRED_SIZE, 1366, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -846,10 +981,71 @@ public class VMain extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        provider_added.setText("Fournisseur ajouté");
+        provider_added.setText("Fournisseur "+ pro.getProvider_name() +" ajouté");
 
     }//GEN-LAST:event_add_provider_buttonActionPerformed
+
+    private void username_toaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_username_toaddActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_username_toaddActionPerformed
+
+    private void user_password_toaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_user_password_toaddActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_user_password_toaddActionPerformed
+
+    private void add_user_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_user_btnActionPerformed
+        MUser user = new MUser();
+        user.setUsername(username_toadd.getText());
+        user.setPassword(user_password_toadd.getText());
+        String role =(String) role_toadd.getSelectedItem();
+        int role_id;
+        if(role=="Super Admin") {
+            role_id=1;
+        } else if(role =="Administrateur") {
+            role_id = 2;
+                    } else {
+            role_id =3;
+        }         
+        user.setRole(role_id);
+        try {
+            DBUser.addUserToDB(user);
+
+// TODO add your handling code here:
+        } catch (SQLException ex) {
+            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            load_users();
+        } catch (SQLException ex) {
+            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            load_user_list_to_delete();
+        } catch (SQLException ex) {
+            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_add_user_btnActionPerformed
+
+    private void delete_user_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_user_btnActionPerformed
+        String to_parse = user_choice_to_delete.getSelectedItem();
+        String id_user[] = to_parse.split("-");
+        int id_user_to_db = parseInt(id_user[0]);
+        try {
+            DBUser.deleteUserByIdToBD(id_user_to_db);
+        } catch (SQLException ex) {
+            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            load_users();
+        } catch (SQLException ex) {
+            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            load_user_list_to_delete();
+        } catch (SQLException ex) {
+            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_delete_user_btnActionPerformed
 
     public void load_article() throws SQLException {
         ArrayList<MArticles> arr = new ArrayList<>();
@@ -935,7 +1131,7 @@ public class VMain extends javax.swing.JFrame {
         for (int i = 0; i < arr.size(); i++) {
             MProvider add = new MProvider();
             add = arr.get(i);
-            String show[] = {add.getProvider_name(), add.getProvider_adress(), DBProvider.getProvidersByIdFromDB(add.getProvider_id_contact())};
+            String show[] = {add.getProvider_name(), add.getProvider_adress(), DBContact.getContactByIdFromDB(add.getProvider_id_contact()).toString2()};
             table.addRow(show);
         }
 
@@ -951,7 +1147,7 @@ public class VMain extends javax.swing.JFrame {
         for (int i = 0; i < arr.size(); i++) {
             MProvider add = new MProvider();
             add = arr.get(i);
-            String show[] = {add.getProvider_name(), add.getProvider_adress(), DBProvider.getProvidersByIdFromDB(add.getProvider_id_contact())};
+            String show[] = {add.getProvider_name(), add.getProvider_adress(), DBContact.getContactByIdFromDB(add.getProvider_id_contact()).toString2()};
             table.addRow(show);
         }
 
@@ -1020,6 +1216,8 @@ public class VMain extends javax.swing.JFrame {
         load_add_article_status();
         load_add_article_provider();
         load_contact_provider();
+        load_users();
+        load_user_list_to_delete();
     }
 
     public void load_add_article_type() {
@@ -1083,6 +1281,43 @@ public class VMain extends javax.swing.JFrame {
         error_message.setText("");
     }
 
+    public void load_users() throws SQLException {
+        ArrayList<MUser> arr = new ArrayList<>();
+        DefaultTableModel model = (DefaultTableModel) user_list.getModel();
+        model.setRowCount(0);
+        user_list.setAutoCreateRowSorter(true);
+        arr = DBUser.getUsersFromDB();
+        DefaultTableModel table = (DefaultTableModel) user_list.getModel();
+        for (int i = 0; i < arr.size(); i++) {
+            MUser add = new MUser();
+            add = arr.get(i);
+            String role = "";
+            if (add.getRole() == 1) {
+                role = "super admin";
+            } else if (add.getRole() == 2) {
+                role = "admin";
+            } else if (add.getRole() == 3) {
+                role = "employé";
+            } else {
+                role = "non déterminé";
+            }
+
+            String show[] = {add.getUsername(), add.getPassword(), role};
+            table.addRow(show);
+        }
+
+    }
+
+    public void load_user_list_to_delete() throws SQLException {
+        user_choice_to_delete.removeAll();
+        ArrayList user_array = new ArrayList<>();
+        user_array = DBUser.getUsersFromDB();
+        for (int i = 0; i < user_array.size(); i++) {
+            String to_add = user_array.get(i).toString();
+            user_choice_to_delete.add(to_add);
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add_article_button;
     private javax.swing.JLabel add_article_message;
@@ -1093,6 +1328,7 @@ public class VMain extends javax.swing.JFrame {
     private java.awt.Button add_contact;
     private java.awt.TextField add_product_name;
     private java.awt.Button add_provider_button;
+    private java.awt.Button add_user_btn;
     private javax.swing.JPanel administration;
     private javax.swing.JPanel article;
     private javax.swing.JTable article_list;
@@ -1100,6 +1336,7 @@ public class VMain extends javax.swing.JFrame {
     private java.awt.Choice choice_contact;
     private javax.swing.JPanel command;
     private javax.swing.JLabel contact_added;
+    private java.awt.Button delete_user_btn;
     private javax.swing.JLabel error_message;
     private javax.swing.JTextField firstname_contact;
     private javax.swing.JLabel id_user;
@@ -1116,6 +1353,11 @@ public class VMain extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1130,6 +1372,7 @@ public class VMain extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private java.awt.Label label1;
     private javax.swing.JTextField lastname_contact;
     private javax.swing.JPanel login;
@@ -1146,10 +1389,15 @@ public class VMain extends javax.swing.JFrame {
     private javax.swing.JTextField provider_adress;
     private javax.swing.JTable provider_list;
     private javax.swing.JTextField provider_name;
+    private javax.swing.JComboBox<String> role_toadd;
     private javax.swing.JLabel statut;
     private javax.swing.JTabbedPane tabbed_pane;
     private javax.swing.JTextField telephone_contact;
+    private java.awt.Choice user_choice_to_delete;
+    private javax.swing.JTable user_list;
+    private javax.swing.JTextField user_password_toadd;
     private javax.swing.JTextField username_field;
+    private javax.swing.JTextField username_toadd;
     private javax.swing.JLabel welcome;
     // End of variables declaration//GEN-END:variables
 }
