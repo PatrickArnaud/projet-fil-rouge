@@ -120,7 +120,6 @@ public class MArticles {
     public String toString() {
         return "MArticles{" + "id=" + id + ", id_supplier=" + id_supplier + ", name=" + name + ", brand=" + brand + ", provider=" + provider + ", status_article=" + status_article + ", type=" + type + ", origin=" + origin + ", id_user=" + id_user + ", creation_date=" + creation_date + '}';
     }
-    
 
     static public ArrayList getArticles() throws SQLException {
         ArrayList<MArticles> arr = new ArrayList<>();
@@ -147,12 +146,62 @@ public class MArticles {
 
     }
 
+    static public ArrayList getArticlesForCommand() throws SQLException {
+        ArrayList<MArticles> arr = new ArrayList<>();
+        MArticles art = null;
+        try {
+
+            String query = "SELECT  id_article, name_article , brand , id_user, status_article FROM nesti_article WHERE status_article = 'Disponible'";
+            Statement smt = cnx.createStatement();
+            ResultSet resultSet = smt.executeQuery(query);
+            while (resultSet.next()) {
+                art = new MArticles();
+                art.setId(resultSet.getInt(1));
+                art.setName(resultSet.getString(2));
+                art.setBrand(resultSet.getString(3));
+                art.setProvider(resultSet.getString(4));
+                art.setStatus_article(resultSet.getString(5));
+                arr.add(art);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            return arr;
+        }
+
+    }
+
     static public ArrayList searchArticles(String search) throws SQLException {
         ArrayList<MArticles> arr = new ArrayList<>();
         MArticles art = null;
         try {
 
             String query = "SELECT  id_article, name_article , brand , id_user, status_article FROM nesti_article WHERE name_article LIKE '" + search + "%'";
+            Statement smt = cnx.createStatement();
+            ResultSet resultSet = smt.executeQuery(query);
+            while (resultSet.next()) {
+                art = new MArticles();
+                art.setId(resultSet.getInt(1));
+                art.setName(resultSet.getString(2));
+                art.setBrand(resultSet.getString(3));
+                art.setProvider(resultSet.getString(4));
+                art.setStatus_article(resultSet.getString(5));
+                arr.add(art);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            return arr;
+        }
+
+    }
+
+    static public ArrayList searchArticlesForCommand(String search) throws SQLException {
+        ArrayList<MArticles> arr = new ArrayList<>();
+        MArticles art = null;
+        try {
+
+            String query = "SELECT  id_article, name_article , brand , id_user, status_article FROM nesti_article WHERE name_article LIKE '" + search + "%' AND status_article ='Disponible' ";
             Statement smt = cnx.createStatement();
             ResultSet resultSet = smt.executeQuery(query);
             while (resultSet.next()) {
@@ -214,7 +263,7 @@ public class MArticles {
         }
     }
 
-    static public MArticles getArticleByNameDetailsFullDetails(String article) {
+    static public MArticles getArticleByNameFullDetails(String article) {
         MArticles art = new MArticles();
         try {
             String query = "SELECT  id_article, name_article , brand, creation_date, status_article, id_user FROM nesti_article WHERE name_article ='" + article + "'";
@@ -228,6 +277,7 @@ public class MArticles {
                 art.setStatus_article(resultSet.getString(5));
                 art.setId_user(resultSet.getInt(6));
             }
+            System.out.println("art.toString() 1  " + art.toString());
             String query_sold_by = "SELECT  id_supplier, origin FROM sold_by WHERE id_article =" + art.getId();
             Statement smt_sold_by = cnx.createStatement();
             ResultSet resultSet_sold_by = smt_sold_by.executeQuery(query_sold_by);
@@ -235,9 +285,11 @@ public class MArticles {
                 art.setId_supplier(resultSet_sold_by.getInt(1));
                 art.setOrigin(resultSet_sold_by.getString(2));
             }
+            System.out.println("art.toString() 2  " + art.toString());
             MProvider pro = new MProvider();
             pro = MProvider.getAProviderById(art.getId_supplier());
             art.setProvider(pro.getProvider_name());
+            System.out.println("art.toString() 3  " + art.toString());
             if (chekIfToolOrIngredient(art.getId()) == 0) {
                 art.setType("Ustensile");
             } else {
@@ -246,6 +298,7 @@ public class MArticles {
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
+            System.out.println("art.toString() 4  " + art.toString());
             return art;
         }
 
@@ -253,18 +306,40 @@ public class MArticles {
 
     static public MArticles getArticleById(int id) throws SQLException {
         MArticles art = new MArticles();
-        try {
-            String query = "SELECT  id_article, name_article , brand FROM nesti_article WHERE id_article = '" + id + "'";
+       try {
+            String query = "SELECT  id_article, name_article , brand, creation_date, status_article, id_user FROM nesti_article WHERE id_article ='" + id + "'";
             Statement smt = cnx.createStatement();
             ResultSet resultSet = smt.executeQuery(query);
             while (resultSet.next()) {
                 art.setId(resultSet.getInt(1));
                 art.setName(resultSet.getString(2));
                 art.setBrand(resultSet.getString(3));
+                art.setCreation_date(resultSet.getDate(4));
+                art.setStatus_article(resultSet.getString(5));
+                art.setId_user(resultSet.getInt(6));
+            }
+            System.out.println("art.toString() 1  " + art.toString());
+            String query_sold_by = "SELECT  id_supplier, origin FROM sold_by WHERE id_article =" + art.getId();
+            Statement smt_sold_by = cnx.createStatement();
+            ResultSet resultSet_sold_by = smt_sold_by.executeQuery(query_sold_by);
+            while (resultSet_sold_by.next()) {
+                art.setId_supplier(resultSet_sold_by.getInt(1));
+                art.setOrigin(resultSet_sold_by.getString(2));
+            }
+            System.out.println("art.toString() 2  " + art.toString());
+            MProvider pro = new MProvider();
+            pro = MProvider.getAProviderById(art.getId_supplier());
+            art.setProvider(pro.getProvider_name());
+            System.out.println("art.toString() 3  " + art.toString());
+            if (chekIfToolOrIngredient(art.getId()) == 0) {
+                art.setType("Ustensile");
+            } else {
+                art.setType("Ingrédient");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
+            System.out.println("art.toString() 4  " + art.toString());
             return art;
         }
 
@@ -372,7 +447,7 @@ public class MArticles {
     static public boolean updateArticle(MArticles art) throws SQLException {
         boolean success = false;
         int id_art = art.getId();
-        System.out.println("id_art"+id_art);
+        System.out.println("id_art" + id_art);
         try {
             String query = "UPDATE nesti_article SET name_article = ?, status_article =  ? WHERE id_article= ?";
             PreparedStatement smt = cnx.prepareStatement(query);
@@ -380,7 +455,7 @@ public class MArticles {
             smt.setString(2, art.getStatus_article());
             smt.setInt(3, id_art);
             smt.executeUpdate();
-            if (chekIfToolOrIngredient(id_art) == 1 && art.getType()== "Ustensile") {
+            if (chekIfToolOrIngredient(id_art) == 1 && art.getType() == "Ustensile") {
                 deleteArticleFromIngredientToDB(art.getId());
                 MArticles art_tool = getArticleByNameFromDB(art.getName());
                 String query_tool = "INSERT INTO nesti_tool (id_article) VALUES(?)";
@@ -428,8 +503,8 @@ public class MArticles {
             return success;
         }
     }
-    
-     static public String getOriginByIdArticle(int id) {
+
+    static public String getOriginByIdArticle(int id) {
         String origin = null;
         try {
             String query = "SELECT origin FROM sold_by WHERE id_article = '" + id + "'";

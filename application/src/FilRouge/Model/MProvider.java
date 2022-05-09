@@ -113,7 +113,6 @@ public class MProvider {
                 pro.setProvider_name(resultSet.getString(3));
                 pro.setProvider_id_contact(resultSet.getInt(4));
             }
-            System.out.println(pro.toString());
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {

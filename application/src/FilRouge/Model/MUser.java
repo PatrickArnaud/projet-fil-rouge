@@ -1,7 +1,6 @@
 package FilRouge.Model;
 
 import FilRouge.Controlleur.DBConnect;
-import static FilRouge.Model.MProvider.cnx;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

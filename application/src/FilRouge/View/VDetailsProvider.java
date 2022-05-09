@@ -90,7 +90,6 @@ public class VDetailsProvider extends javax.swing.JFrame {
         for (int i = 0; i < arr.size(); i++) {
             MProvider add = new MProvider();
             add = arr.get(i);
-            System.out.println("DBContact.getContactByIdFromDB(add.getProvider_id_contact()).toString()"+DBContact.getContactByIdFromDB(add.getProvider_id_contact()).toString());
             String show[] = {add.getProvider_name(), add.getProvider_adress(), DBContact.getContactByIdFromDB(add.getProvider_id_contact()).toString()};
             table.addRow(show);
         }

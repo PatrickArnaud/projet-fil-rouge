@@ -28,7 +28,6 @@ public class DBLogin {
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            log.toString();
             return log;
         }
 

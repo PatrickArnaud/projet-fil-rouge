@@ -1,14 +1,17 @@
 package FilRouge.View;
 
 import FilRouge.Controlleur.DBArticle;
+import static FilRouge.Controlleur.DBArticle.getArticlesForCommandFromDB;
 import static FilRouge.Controlleur.DBArticle.getArticlesFromDB;
 import FilRouge.Controlleur.DBContact;
 import FilRouge.Controlleur.DBLogin;
+import FilRouge.Controlleur.DBOrder;
 import FilRouge.Controlleur.DBProvider;
 import FilRouge.Controlleur.DBUser;
 import FilRouge.Model.MArticles;
 import FilRouge.Model.MContact;
 import FilRouge.Model.MLogin;
+import FilRouge.Model.MOrder;
 import FilRouge.Model.MProvider;
 import FilRouge.Model.MUser;
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -16,7 +19,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import static java.lang.Integer.parseInt;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -84,6 +90,23 @@ public class VMain extends javax.swing.JFrame {
         command = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        order_tracking = new javax.swing.JTable();
+        article_search_for_command = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
+        command1 = new javax.swing.JPanel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        article_command_table = new javax.swing.JTable();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        jTable4 = new javax.swing.JTable();
+        search_article_for_command = new javax.swing.JTextField();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        search_batch = new javax.swing.JTextField();
+        jLabel30 = new javax.swing.JLabel();
+        research_command_message = new javax.swing.JLabel();
         administration = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
@@ -501,31 +524,205 @@ public class VMain extends javax.swing.JFrame {
         jLabel24.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel24.setText("Passer une commande :");
 
+        order_tracking.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Numéro", "Produit", "Statut", "Date commande"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane5.setViewportView(order_tracking);
+
+        article_search_for_command.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                article_search_for_commandActionPerformed(evt);
+            }
+        });
+        article_search_for_command.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                article_search_for_commandKeyReleased(evt);
+            }
+        });
+
+        jLabel25.setText("Rechercher article");
+
+        jLabel26.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel26.setText("Suivi de commande :");
+
+        jLabel27.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel27.setText("Passer une commande :");
+
+        article_command_table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Article", "Fournisseur", "Type "
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane6.setViewportView(article_command_table);
+
+        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane7.setViewportView(jTable4);
+
+        search_article_for_command.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                search_article_for_commandActionPerformed(evt);
+            }
+        });
+
+        jLabel28.setText("Rechercher article");
+
+        jLabel29.setText("Rechercher commande");
+
+        search_batch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                search_batchActionPerformed(evt);
+            }
+        });
+
+        jLabel30.setText("Doucle cliquez sur l'article souhaité pour passer une commande");
+
+        javax.swing.GroupLayout command1Layout = new javax.swing.GroupLayout(command1);
+        command1.setLayout(command1Layout);
+        command1Layout.setHorizontalGroup(
+            command1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(command1Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(command1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 633, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(command1Layout.createSequentialGroup()
+                        .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(search_article_for_command, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(research_command_message, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(command1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(command1Layout.createSequentialGroup()
+                        .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
+                        .addComponent(search_batch, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 675, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
+            .addGroup(command1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(command1Layout.createSequentialGroup()
+                    .addGap(16, 16, 16)
+                    .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(1046, Short.MAX_VALUE)))
+        );
+        command1Layout.setVerticalGroup(
+            command1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(command1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
+                .addComponent(jLabel30)
+                .addGap(39, 39, 39)
+                .addGroup(command1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(research_command_message, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(command1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(search_article_for_command, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel28)
+                        .addComponent(jLabel29)
+                        .addComponent(search_batch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(command1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
+                    .addComponent(jScrollPane7))
+                .addGap(38, 38, 38))
+            .addGroup(command1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(command1Layout.createSequentialGroup()
+                    .addGap(16, 16, 16)
+                    .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(676, Short.MAX_VALUE)))
+        );
+
         javax.swing.GroupLayout commandLayout = new javax.swing.GroupLayout(command);
         command.setLayout(commandLayout);
         commandLayout.setHorizontalGroup(
             commandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, commandLayout.createSequentialGroup()
-                .addContainerGap(622, Short.MAX_VALUE)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(440, 440, 440))
+            .addGroup(commandLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(commandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(commandLayout.createSequentialGroup()
+                        .addGap(651, 651, 651)
+                        .addGroup(commandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 675, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(commandLayout.createSequentialGroup()
+                        .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(article_search_for_command, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(21, Short.MAX_VALUE))
             .addGroup(commandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(commandLayout.createSequentialGroup()
                     .addGap(16, 16, 16)
                     .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(1046, Short.MAX_VALUE)))
+            .addGroup(commandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(commandLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(command1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         commandLayout.setVerticalGroup(
             commandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(commandLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addContainerGap()
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(676, Short.MAX_VALUE))
+                .addGap(69, 69, 69)
+                .addGroup(commandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(article_search_for_command, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel25))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(38, Short.MAX_VALUE))
             .addGroup(commandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(commandLayout.createSequentialGroup()
                     .addGap(16, 16, 16)
                     .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(676, Short.MAX_VALUE)))
+            .addGroup(commandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(commandLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(command1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         tabbed_pane.addTab("Commande", command);
@@ -981,7 +1178,7 @@ public class VMain extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
         }
-        provider_added.setText("Fournisseur "+ pro.getProvider_name() +" ajouté");
+        provider_added.setText("Fournisseur " + pro.getProvider_name() + " ajouté");
 
     }//GEN-LAST:event_add_provider_buttonActionPerformed
 
@@ -997,15 +1194,15 @@ public class VMain extends javax.swing.JFrame {
         MUser user = new MUser();
         user.setUsername(username_toadd.getText());
         user.setPassword(user_password_toadd.getText());
-        String role =(String) role_toadd.getSelectedItem();
+        String role = (String) role_toadd.getSelectedItem();
         int role_id;
-        if(role=="Super Admin") {
-            role_id=1;
-        } else if(role =="Administrateur") {
+        if (role == "Super Admin") {
+            role_id = 1;
+        } else if (role == "Administrateur") {
             role_id = 2;
-                    } else {
-            role_id =3;
-        }         
+        } else {
+            role_id = 3;
+        }
         user.setRole(role_id);
         try {
             DBUser.addUserToDB(user);
@@ -1047,6 +1244,28 @@ public class VMain extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_delete_user_btnActionPerformed
 
+    private void search_batchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_batchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search_batchActionPerformed
+
+    private void search_article_for_commandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_article_for_commandActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search_article_for_commandActionPerformed
+
+    private void article_search_for_commandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_article_search_for_commandActionPerformed
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_article_search_for_commandActionPerformed
+
+    private void article_search_for_commandKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_article_search_for_commandKeyReleased
+        try {
+            load_article_search_for_command(DBArticle.searchArticlesForCcmmandFromDB(article_search_for_command.getText()));
+        } catch (SQLException ex) {
+            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_article_search_for_commandKeyReleased
+
     public void load_article() throws SQLException {
         ArrayList<MArticles> arr = new ArrayList<>();
         DefaultTableModel model = (DefaultTableModel) article_list.getModel();
@@ -1087,6 +1306,49 @@ public class VMain extends javax.swing.JFrame {
             add = arr.get(i);
             String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersByIdFromDB(DBProvider.getProvidersIdByIdArticleFromDB(add.getId())), DBArticle.getOriginByIdArticleFromDB(add.getId()), add.getStatus_article()};
             table.addRow(show);
+        }
+
+    }
+
+    public void load_article_command() throws SQLException {
+        ArrayList<MArticles> arr = new ArrayList<>();
+        DefaultTableModel model_command = (DefaultTableModel) article_command_table.getModel();
+        model_command.setRowCount(0);
+        article_command_table.setAutoCreateRowSorter(true);
+        //event listener for modify
+        article_command_table.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int row = article_command_table.getSelectedRow();
+                    int col = article_command_table.getSelectedColumn();
+                    MArticles art = new MArticles();
+                    if (col == 0) {
+                        //by name
+                        art = DBArticle.getArticleByNameFullDetailsFromDB((String) article_command_table.getValueAt(row, col));
+                    } else if (col == 1) {
+                        //by brand
+                        art = DBArticle.getArticleByNameFullDetailsFromDB((String) article_command_table.getValueAt(row, 0));
+                    } else if (col == 2) {
+                        //by provider
+                        art = DBArticle.getArticleByNameFullDetailsFromDB((String) article_command_table.getValueAt(row, 0));
+                    }
+                    VDetailsCommand detailsCommand = null;
+                    try {
+                        detailsCommand = new VDetailsCommand(art, article_command_table, parseInt(id_user.getText()));
+                    } catch (SQLException ex) {
+                        Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    detailsCommand.setVisible(true);
+                }
+            }
+        });
+        arr = getArticlesForCommandFromDB();
+        DefaultTableModel table_command = (DefaultTableModel) article_command_table.getModel();
+        for (int i = 0; i < arr.size(); i++) {
+            MArticles add = new MArticles();
+            add = arr.get(i);
+            String show[] = {add.getName(), DBProvider.getProvidersByIdFromDB(DBProvider.getProvidersIdByIdArticleFromDB(add.getId())), DBArticle.getOriginByIdArticleFromDB(add.getId()), add.getStatus_article()};
+            table_command.addRow(show);
         }
 
     }
@@ -1137,6 +1399,69 @@ public class VMain extends javax.swing.JFrame {
 
     }
 
+    public void load_order_tracking() throws SQLException {
+        ArrayList<MOrder> arr = new ArrayList<>();
+        DefaultTableModel model = (DefaultTableModel) order_tracking.getModel();
+        model.setRowCount(0);
+        order_tracking.setAutoCreateRowSorter(true);
+        //event listener for modify
+        order_tracking.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    try {
+                        int row = order_tracking.getSelectedRow();
+                        int col = order_tracking.getSelectedColumn();
+                        MOrder ord = new MOrder();
+                        if (col == 0) {
+                            ord = DBOrder.GetOrdersDetailsFromDB((String) order_tracking.getValueAt(row, col));
+                        } else if (col == 1) {
+                            ord = DBOrder.GetOrdersDetailsFromDB((String) order_tracking.getValueAt(row, 0));
+                        } else if (col == 2) {
+                            ord = DBOrder.GetOrdersDetailsFromDB((String) order_tracking.getValueAt(row, 0));
+                        } else if (col == 3) {
+                            ord = DBOrder.GetOrdersDetailsFromDB((String) order_tracking.getValueAt(row, 0));
+                        }
+                        VOrder order = new VOrder(order_tracking, ord);
+                        order.setVisible(true);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        arr = DBOrder.GetOrdersFromDB();
+        DefaultTableModel table = (DefaultTableModel) order_tracking.getModel();
+        for (int i = 0; i < arr.size(); i++) {
+            MOrder add = new MOrder();
+            add = arr.get(i);
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = new Date();
+            String dateToStr = dateFormat.format(add.getCreation_date());
+            String show[] = {String.valueOf(add.getId_order()), add.getArticle().getName(), add.getStatus(), dateToStr};
+            table.addRow(show);
+        }
+    }
+
+     public void load_order_tracking_without_listener() throws SQLException {
+        ArrayList<MOrder> arr = new ArrayList<>();
+        DefaultTableModel model = (DefaultTableModel) order_tracking.getModel();
+        model.setRowCount(0);
+        order_tracking.setAutoCreateRowSorter(true);
+        //event listener for modify
+              arr = DBOrder.GetOrdersFromDB();
+        DefaultTableModel table = (DefaultTableModel) order_tracking.getModel();
+        for (int i = 0; i < arr.size(); i++) {
+            MOrder add = new MOrder();
+            add = arr.get(i);
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String dateToStr = dateFormat.format(add.getCreation_date());
+            String show[] = {String.valueOf(add.getId_order()), add.getArticle().getName(), add.getStatus(), dateToStr};
+            table.addRow(show);
+        }
+
+    }
+     
+     
     public void load_provider_without_listener() throws SQLException {
         ArrayList<MProvider> arr = new ArrayList<>();
         DefaultTableModel model = (DefaultTableModel) provider_list.getModel();
@@ -1163,6 +1488,25 @@ public class VMain extends javax.swing.JFrame {
         model.setRowCount(0);
         article_list.setAutoCreateRowSorter(true);
         DefaultTableModel table = (DefaultTableModel) article_list.getModel();
+        for (int i = 0; i < arr.size(); i++) {
+            MArticles add = new MArticles();
+            add = arr.get(i);
+            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersByIdFromDB(DBProvider.getProvidersIdByIdArticleFromDB(add.getId())), DBArticle.getOriginByIdArticleFromDB(add.getId()), add.getStatus_article()};
+            table.addRow(show);
+        }
+
+    }
+
+    public void load_article_search_for_command(ArrayList<MArticles> arr) throws SQLException {
+        if (arr.size() == 0) {
+            research_command_message.setText("Oups, il n'y a rien ici ...");
+        } else {
+            research_command_message.setText("");
+        }
+        DefaultTableModel model = (DefaultTableModel) article_command_table.getModel();
+        model.setRowCount(0);
+        article_command_table.setAutoCreateRowSorter(true);
+        DefaultTableModel table = (DefaultTableModel) article_command_table.getModel();
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
             add = arr.get(i);
@@ -1218,6 +1562,8 @@ public class VMain extends javax.swing.JFrame {
         load_contact_provider();
         load_users();
         load_user_list_to_delete();
+        load_article_command();
+        load_order_tracking();
     }
 
     public void load_add_article_type() {
@@ -1331,10 +1677,13 @@ public class VMain extends javax.swing.JFrame {
     private java.awt.Button add_user_btn;
     private javax.swing.JPanel administration;
     private javax.swing.JPanel article;
+    private javax.swing.JTable article_command_table;
     private javax.swing.JTable article_list;
+    private javax.swing.JTextField article_search_for_command;
     private java.awt.Button button_connect;
     private java.awt.Choice choice_contact;
     private javax.swing.JPanel command;
+    private javax.swing.JPanel command1;
     private javax.swing.JLabel contact_added;
     private java.awt.Button delete_user_btn;
     private javax.swing.JLabel error_message;
@@ -1358,7 +1707,13 @@ public class VMain extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1373,6 +1728,10 @@ public class VMain extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JTable jTable4;
     private java.awt.Label label1;
     private javax.swing.JTextField lastname_contact;
     private javax.swing.JPanel login;
@@ -1382,6 +1741,7 @@ public class VMain extends javax.swing.JFrame {
     private javax.swing.JLabel manual_supplier;
     private javax.swing.JLabel manual_user;
     private javax.swing.JLabel message_search;
+    private javax.swing.JTable order_tracking;
     private javax.swing.JPasswordField password_field;
     private javax.swing.JPanel profile;
     private javax.swing.JPanel provider;
@@ -1389,7 +1749,10 @@ public class VMain extends javax.swing.JFrame {
     private javax.swing.JTextField provider_adress;
     private javax.swing.JTable provider_list;
     private javax.swing.JTextField provider_name;
+    private javax.swing.JLabel research_command_message;
     private javax.swing.JComboBox<String> role_toadd;
+    private javax.swing.JTextField search_article_for_command;
+    private javax.swing.JTextField search_batch;
     private javax.swing.JLabel statut;
     private javax.swing.JTabbedPane tabbed_pane;
     private javax.swing.JTextField telephone_contact;

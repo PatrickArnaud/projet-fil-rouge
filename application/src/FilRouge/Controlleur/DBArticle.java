@@ -6,6 +6,7 @@ import static FilRouge.Model.MArticles.chekIfToolOrIngredient;
 import static FilRouge.Model.MArticles.deleteArticleByName;
 import static FilRouge.Model.MArticles.deleteArticleFromIngredient;
 import static FilRouge.Model.MArticles.deleteArticleFromTool;
+import static FilRouge.Model.MArticles.getArticleById;
 import static FilRouge.Model.MArticles.getArticleByName;
 import static FilRouge.Model.MArticles.getArticleByNameDetails;
 import static FilRouge.Model.MArticles.updateArticle;
@@ -21,11 +22,27 @@ public class DBArticle {
         arr = art.getArticles();
         return arr;
     }
+    
+    static public ArrayList getArticlesForCommandFromDB() throws SQLException {
+        MArticles art = new MArticles();
+        ArrayList<MArticles> arr = new ArrayList<>();;
+        arr = art.getArticlesForCommand();
+        return arr;
+    }
+
 
     static public ArrayList searchArticlesFromDB(String search) throws SQLException {
         MArticles art = new MArticles();
         ArrayList<MArticles> arr = new ArrayList<>();;
         arr = art.searchArticles(search);
+        return arr;
+
+    }
+    
+     static public ArrayList searchArticlesForCcmmandFromDB(String search) throws SQLException {
+        MArticles art = new MArticles();
+        ArrayList<MArticles> arr = new ArrayList<>();;
+        arr = art.searchArticlesForCommand(search);
         return arr;
 
     }
@@ -45,7 +62,7 @@ public class DBArticle {
 
     static public MArticles getArticleByIdFromDB(int id) throws SQLException {
         MArticles art = new MArticles();
-        art = getArticleByIdFromDB(id);
+        art = getArticleById(id);
         return art;
 
     }
@@ -86,9 +103,9 @@ public class DBArticle {
         return success;
     }
     
-    static public MArticles getArticleByNameDetailsFullDetails(String article) {
+    static public MArticles getArticleByNameFullDetailsFromDB(String article) {
         MArticles art = new MArticles();
-        art = MArticles.getArticleByNameDetailsFullDetails(article);
+        art = MArticles.getArticleByNameFullDetails(article);
         return art;
         }
 
