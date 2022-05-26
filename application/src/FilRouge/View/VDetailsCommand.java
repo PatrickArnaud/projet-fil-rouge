@@ -1,6 +1,8 @@
 package FilRouge.View;
 
+import FilRouge.Controlleur.DBArticle;
 import FilRouge.Controlleur.DBOrder;
+import FilRouge.Controlleur.DBProvider;
 import FilRouge.Model.MArticles;
 import FilRouge.Model.MOrder;
 import static java.lang.Float.parseFloat;
@@ -9,7 +11,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class VDetailsCommand extends javax.swing.JFrame {
 
@@ -27,6 +31,8 @@ public class VDetailsCommand extends javax.swing.JFrame {
         origin_art_tc.setText(article.getOrigin());
         String id = String.valueOf(id_user_to);
         id_user.setText(id);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
 
     }
 
@@ -238,6 +244,7 @@ public class VDetailsCommand extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(VDetailsCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }//GEN-LAST:event_command_buttonActionPerformed
 
     public static void main(String args[]) {

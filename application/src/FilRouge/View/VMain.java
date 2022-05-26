@@ -1055,6 +1055,7 @@ public class VMain extends javax.swing.JFrame {
 
     }//GEN-LAST:event_input_searchActionPerformed
 
+    //add an article
     private void add_article_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_article_buttonActionPerformed
         MArticles art = new MArticles();
         art.setName(add_product_name.getText());
@@ -1074,6 +1075,11 @@ public class VMain extends javax.swing.JFrame {
             Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
         }
         add_article_message.setText("Ajout de " + art.getName() + " Effectué");
+        try {
+            reload_article_command();
+        } catch (SQLException ex) {
+            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_add_article_buttonActionPerformed
 
     private void add_product_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_product_nameActionPerformed
@@ -1294,12 +1300,28 @@ public class VMain extends javax.swing.JFrame {
                         //by disponibility
                         art = DBArticle.getArticleByNameDetailsFromDB((String) article_list.getValueAt(row, 0));
                     }
-                    VDetails details = new VDetails(art, article_list);
+                    VDetails details = new VDetails(art, article_list, article_command_table);
                     details.setVisible(true);
                 }
             }
         });
         arr = getArticlesFromDB();
+        DefaultTableModel table = (DefaultTableModel) article_list.getModel();
+        for (int i = 0; i < arr.size(); i++) {
+            MArticles add = new MArticles();
+            add = arr.get(i);
+            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersByIdFromDB(DBProvider.getProvidersIdByIdArticleFromDB(add.getId())), DBArticle.getOriginByIdArticleFromDB(add.getId()), add.getStatus_article()};
+            table.addRow(show);
+        }
+
+    }
+
+    public void load_article_without_listener() throws SQLException {
+        ArrayList<MArticles> arr = getArticlesFromDB();
+        DefaultTableModel model = (DefaultTableModel) article_list.getModel();
+        model.setRowCount(0);
+        article_list.setAutoCreateRowSorter(true);
+        //event listener for modify
         DefaultTableModel table = (DefaultTableModel) article_list.getModel();
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
@@ -1342,6 +1364,22 @@ public class VMain extends javax.swing.JFrame {
                 }
             }
         });
+        arr = getArticlesForCommandFromDB();
+        DefaultTableModel table_command = (DefaultTableModel) article_command_table.getModel();
+        for (int i = 0; i < arr.size(); i++) {
+            MArticles add = new MArticles();
+            add = arr.get(i);
+            String show[] = {add.getName(), DBProvider.getProvidersByIdFromDB(DBProvider.getProvidersIdByIdArticleFromDB(add.getId())), DBArticle.getOriginByIdArticleFromDB(add.getId()), add.getStatus_article()};
+            table_command.addRow(show);
+        }
+
+    }
+
+    public void reload_article_command() throws SQLException {
+        ArrayList<MArticles> arr = new ArrayList<>();
+        DefaultTableModel model_command = (DefaultTableModel) article_command_table.getModel();
+        model_command.setRowCount(0);
+        article_command_table.setAutoCreateRowSorter(true);
         arr = getArticlesForCommandFromDB();
         DefaultTableModel table_command = (DefaultTableModel) article_command_table.getModel();
         for (int i = 0; i < arr.size(); i++) {
@@ -1441,14 +1479,16 @@ public class VMain extends javax.swing.JFrame {
             table.addRow(show);
         }
     }
+    
+    
 
-     public void load_order_tracking_without_listener() throws SQLException {
+    public void load_order_tracking_without_listener() throws SQLException {
         ArrayList<MOrder> arr = new ArrayList<>();
         DefaultTableModel model = (DefaultTableModel) order_tracking.getModel();
         model.setRowCount(0);
         order_tracking.setAutoCreateRowSorter(true);
         //event listener for modify
-              arr = DBOrder.GetOrdersFromDB();
+        arr = DBOrder.GetOrdersFromDB();
         DefaultTableModel table = (DefaultTableModel) order_tracking.getModel();
         for (int i = 0; i < arr.size(); i++) {
             MOrder add = new MOrder();
@@ -1460,8 +1500,7 @@ public class VMain extends javax.swing.JFrame {
         }
 
     }
-     
-     
+
     public void load_provider_without_listener() throws SQLException {
         ArrayList<MProvider> arr = new ArrayList<>();
         DefaultTableModel model = (DefaultTableModel) provider_list.getModel();
@@ -1507,22 +1546,6 @@ public class VMain extends javax.swing.JFrame {
         model.setRowCount(0);
         article_command_table.setAutoCreateRowSorter(true);
         DefaultTableModel table = (DefaultTableModel) article_command_table.getModel();
-        for (int i = 0; i < arr.size(); i++) {
-            MArticles add = new MArticles();
-            add = arr.get(i);
-            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersByIdFromDB(DBProvider.getProvidersIdByIdArticleFromDB(add.getId())), DBArticle.getOriginByIdArticleFromDB(add.getId()), add.getStatus_article()};
-            table.addRow(show);
-        }
-
-    }
-
-    public void load_article_without_listener() throws SQLException {
-        ArrayList<MArticles> arr = getArticlesFromDB();
-        DefaultTableModel model = (DefaultTableModel) article_list.getModel();
-        model.setRowCount(0);
-        article_list.setAutoCreateRowSorter(true);
-        //event listener for modify
-        DefaultTableModel table = (DefaultTableModel) article_list.getModel();
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
             add = arr.get(i);

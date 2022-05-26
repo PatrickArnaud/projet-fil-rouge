@@ -5,8 +5,17 @@
  */
 package FilRouge.View;
 
+import FilRouge.Controlleur.DBOrder;
 import FilRouge.Model.MOrder;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class VOrder extends javax.swing.JFrame {
 
@@ -22,6 +31,7 @@ public class VOrder extends javax.swing.JFrame {
     }
 
     public void launch(MOrder order) {
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         id_order.setText(String.valueOf(order.getId_order()));
         name_article.setText(order.getArticle().getName());
         origin.setText(order.getArticle().getOrigin());
@@ -30,6 +40,9 @@ public class VOrder extends javax.swing.JFrame {
         provider_name.setText(order.getArticle().getProvider());
         quantity.setText(String.valueOf(order.getQuantity()));
         status.add(order.getStatus());
+        status.add("Arrivée");
+        status.add("Annulée");
+        status.add("Retardée");
 
     }
 
@@ -47,6 +60,7 @@ public class VOrder extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         id_order = new javax.swing.JLabel();
         name_article = new javax.swing.JLabel();
@@ -63,6 +77,7 @@ public class VOrder extends javax.swing.JFrame {
         origin = new javax.swing.JLabel();
         provider_name = new javax.swing.JLabel();
         status = new java.awt.Choice();
+        change_status_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,6 +129,13 @@ public class VOrder extends javax.swing.JFrame {
         status.setBackground(new java.awt.Color(51, 51, 51));
         status.setForeground(new java.awt.Color(204, 204, 204));
 
+        change_status_btn.setText("Changer statut commande");
+        change_status_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                change_status_btnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -162,7 +184,8 @@ public class VOrder extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(price, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addComponent(price, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(change_status_btn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -196,11 +219,30 @@ public class VOrder extends javax.swing.JFrame {
                     .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(origin, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(provider_name, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(210, Short.MAX_VALUE))
+                .addGap(68, 68, 68)
+                .addComponent(change_status_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(100, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void change_status_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_change_status_btnActionPerformed
+        String id_command = id_order.getText();
+        int id_command_to_int = Integer.parseInt(id_command);
+        String new_status = status.getSelectedItem();
+        try {
+            DBOrder.changeStatusFromDB(id_command_to_int, new_status);
+        } catch (SQLException ex) {
+            Logger.getLogger(VOrder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            load_order_tracking_without_listener();
+        } catch (SQLException ex) {
+            Logger.getLogger(VOrder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_change_status_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -237,7 +279,28 @@ public class VOrder extends javax.swing.JFrame {
         });
     }
 
+    public void load_order_tracking_without_listener() throws SQLException {
+        ArrayList<MOrder> arr = new ArrayList<>();
+        DefaultTableModel model = (DefaultTableModel) jtable.getModel();
+        model.setRowCount(0);
+        jtable.setAutoCreateRowSorter(true);
+        //event listener for modify
+        arr = DBOrder.GetOrdersFromDB();
+        DefaultTableModel table = (DefaultTableModel) jtable.getModel();
+        for (int i = 0; i < arr.size(); i++) {
+            MOrder add = new MOrder();
+            add = arr.get(i);
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String dateToStr = dateFormat.format(add.getCreation_date());
+            String show[] = {String.valueOf(add.getId_order()), add.getArticle().getName(), add.getStatus(), dateToStr};
+            table.addRow(show);
+        }
+
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton change_status_btn;
     private javax.swing.JLabel id_order;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
@@ -247,6 +310,7 @@ public class VOrder extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel name_article;
     private javax.swing.JLabel origin;
     private javax.swing.JLabel packaging;

@@ -15,10 +15,11 @@ import javax.swing.table.DefaultTableModel;
 public class VDetails extends javax.swing.JFrame {
 
     JTable jtable;
+    JTable command_table;
 
-    public VDetails(MArticles article, JTable jtable) {
+    public VDetails(MArticles article, JTable jtable, JTable command_table) {
         this.jtable = jtable;
-       // FlatDarkLaf.setup();
+        this.command_table = command_table;
         initComponents();
         System.out.println(article.toString());
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -310,6 +311,8 @@ public class VDetails extends javax.swing.JFrame {
             Logger.getLogger(VDetails.class.getName()).log(Level.SEVERE, null, ex);
         }
         reload_articles();
+        reload_articles_command();
+
     }//GEN-LAST:event_modifyActionPerformed
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
@@ -325,6 +328,7 @@ public class VDetails extends javax.swing.JFrame {
         origin_details.removeAll();
         type_details.removeAll();
         reload_articles();
+        reload_articles_command();
     }//GEN-LAST:event_deleteActionPerformed
 
     private void reload_articles() {
@@ -414,6 +418,26 @@ public class VDetails extends javax.swing.JFrame {
         load_add_article_provider();
         load_add_article_type();
         load_add_article_origin();
+    }
+
+    private void reload_articles_command() {
+        ArrayList<MArticles> arr = new ArrayList();
+
+        try {
+            arr = DBArticle.getArticlesFromDB();
+        } catch (SQLException ex) {
+            Logger.getLogger(VDetails.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        DefaultTableModel model = (DefaultTableModel) command_table.getModel();
+        model.setRowCount(0);
+        command_table.setAutoCreateRowSorter(true);
+        DefaultTableModel table = (DefaultTableModel) command_table.getModel();
+        for (int i = 0; i < arr.size(); i++) {
+            MArticles add = new MArticles();
+            add = arr.get(i);
+            String show[] = {add.getName(), DBProvider.getProvidersByIdFromDB(DBProvider.getProvidersIdByIdArticleFromDB(add.getId())), DBArticle.getOriginByIdArticleFromDB(add.getId()), add.getStatus_article()};
+            table.addRow(show);
+        }
     }
 
 

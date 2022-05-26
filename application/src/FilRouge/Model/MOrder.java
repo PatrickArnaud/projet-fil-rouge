@@ -228,7 +228,7 @@ public class MOrder {
     }
 
     static public MOrder GetOrdersDetails(String id_order) throws SQLException {
-        MOrder ord =  new MOrder();
+        MOrder ord = new MOrder();
         try {
             String query = "SELECT  id_order, status_order , creation_date , id_user FROM nesti_order WHERE id_order='" + id_order + "'";
             Statement smt = cnx.createStatement();
@@ -446,6 +446,16 @@ public class MOrder {
             ex.printStackTrace();
         }
         return unit;
+    }
+
+    static public boolean changeStatus(int id_order, String status) throws SQLException {
+        String query = "UPDATE nesti_order SET status_order = ? WHERE id_order= ?";
+        PreparedStatement smt_status = cnx.prepareStatement(query);
+        smt_status.setString(1, status);
+        smt_status.setInt(2, id_order);
+        System.out.println("smt_status : "+smt_status);
+        smt_status.executeUpdate();
+        return false;
     }
 
 }

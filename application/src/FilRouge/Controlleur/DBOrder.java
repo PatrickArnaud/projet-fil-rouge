@@ -36,6 +36,14 @@ public class DBOrder {
         MOrder ord = new MOrder();
         ord = GetOrdersDetails(id_order);
         return ord;
-
     }
+
+    static public boolean changeStatusFromDB(int id_order, String status) throws SQLException {
+
+        MOrder ord = new MOrder();
+        ord.changeStatus(id_order,status);
+        return false;
+        
+    }
+
 }
