@@ -1,10 +1,9 @@
 package FilRouge.View;
 
-import FilRouge.Controlleur.DBArticle;
 import FilRouge.Controlleur.DBOrder;
-import FilRouge.Controlleur.DBProvider;
 import FilRouge.Model.MArticles;
 import FilRouge.Model.MOrder;
+import Tools.Validator;
 import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import java.sql.SQLException;
@@ -13,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 public class VDetailsCommand extends javax.swing.JFrame {
 
@@ -32,7 +30,6 @@ public class VDetailsCommand extends javax.swing.JFrame {
         String id = String.valueOf(id_user_to);
         id_user.setText(id);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
 
     }
 
@@ -224,27 +221,39 @@ public class VDetailsCommand extends javax.swing.JFrame {
 
     private void command_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_command_buttonActionPerformed
 
-        MOrder order = new MOrder();
-        String to_parse_pack = pack_choice.getSelectedItem();
-        String[] id_pack = to_parse_pack.split("-");
-        int id_pack_to_db = parseInt(id_pack[0]);
-        order.setId_package(id_pack_to_db);
-        order.setKind_package(pack_choice.getSelectedItem());
-        String to_parse_mesure = unit_choice.getSelectedItem();
-        String[] id_mesure = to_parse_mesure.split("-");
-        int id_unit_to_db = parseInt(id_mesure[0]);
-        order.setId_mesure(id_unit_to_db);
-        order.setName_mesure(unit_choice.getSelectedItem());
-        order.setQuantity(parseFloat(quantity_field.getText()));
-        order.setPrice(parseFloat(price_field.getText()));
-        order.setId_user(parseInt(id_user.getText()));
-        order.setArticle(article);
-        try {
-            DBOrder.addCommandToDB(order);
-        } catch (SQLException ex) {
-            Logger.getLogger(VDetailsCommand.class.getName()).log(Level.SEVERE, null, ex);
+        Validator val = new Validator();
+        if ("".equals(quantity_field.getText()) && "".equals(price_field.getText())) {
+            String message = "Merci de saisir un nom et une adresse valide";
+            VError error = new VError(message);
+            error.setVisible(true);
+        } else {
+            if (val.numericEntry(parseFloat(quantity_field.getText())) && val.numericEntry(parseFloat(price_field.getText()))) {
+                MOrder order = new MOrder();
+                String to_parse_pack = pack_choice.getSelectedItem();
+                String[] id_pack = to_parse_pack.split("-");
+                int id_pack_to_db = parseInt(id_pack[0]);
+                order.setId_package(id_pack_to_db);
+                order.setKind_package(pack_choice.getSelectedItem());
+                String to_parse_mesure = unit_choice.getSelectedItem();
+                String[] id_mesure = to_parse_mesure.split("-");
+                int id_unit_to_db = parseInt(id_mesure[0]);
+                order.setId_mesure(id_unit_to_db);
+                order.setName_mesure(unit_choice.getSelectedItem());
+                order.setQuantity(parseFloat(quantity_field.getText()));
+                order.setPrice(parseFloat(price_field.getText()));
+                order.setId_user(parseInt(id_user.getText()));
+                order.setArticle(article);
+                try {
+                    DBOrder.addCommandToDB(order);
+                } catch (SQLException ex) {
+                    Logger.getLogger(VDetailsCommand.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                String message = "Merci de saisir un nom et une adresse valide";
+                VError error = new VError(message);
+                error.setVisible(true);
+            }
         }
-        
     }//GEN-LAST:event_command_buttonActionPerformed
 
     public static void main(String args[]) {

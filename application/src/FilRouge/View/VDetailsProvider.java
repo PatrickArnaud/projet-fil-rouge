@@ -4,6 +4,7 @@ import FilRouge.Controlleur.DBContact;
 import FilRouge.Controlleur.DBProvider;
 import FilRouge.Model.MContact;
 import FilRouge.Model.MProvider;
+import Tools.Validator;
 import java.awt.Choice;
 import static java.lang.Integer.parseInt;
 import java.sql.SQLException;
@@ -392,26 +393,32 @@ public class VDetailsProvider extends javax.swing.JFrame {
     }//GEN-LAST:event_contact_nameActionPerformed
 
     private void modify_provider_contactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modify_provider_contactActionPerformed
-
-        MContact contact = new MContact();
-        contact.setFirstname(contact_name.getText());
-        contact.setLastname(provider_contact_firstname.getText());
-        contact.setId(parseInt(id_contact_text.getText()));
-        contact.setTelephone(provider_contact_phone.getText());
-        try {
-            DBContact.updateContactToDB(contact);
-        } catch (SQLException ex) {
-            Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
+        Validator val = new Validator();
+        if (val.stringEntry(contact_name.getText()) && val.stringEntry(provider_contact_firstname.getText()) && val.numericEntry(parseInt(id_contact_text.getText()))) {
+            MContact contact = new MContact();
+            contact.setFirstname(contact_name.getText());
+            contact.setLastname(provider_contact_firstname.getText());
+            contact.setId(parseInt(id_contact_text.getText()));
+            contact.setTelephone(provider_contact_phone.getText());
+            try {
+                DBContact.updateContactToDB(contact);
+            } catch (SQLException ex) {
+                Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                reload_contact_provider();
+            } catch (SQLException ex) {
+                Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            contact_name.setText(contact.getLastname());
+            provider_contact_firstname.setText(contact.getFirstname());
+            id_contact_text.setText(String.valueOf(contact.getId()));
+            provider_contact_phone.setText(contact.getTelephone());
+        } else {
+            String message = "Merci de saisir un nom, prénom et une adresse valide";
+            VError error = new VError(message);
+            error.setVisible(true);
         }
-        try {
-            reload_contact_provider();
-        } catch (SQLException ex) {
-            Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        contact_name.setText(contact.getLastname());
-        provider_contact_firstname.setText(contact.getFirstname());
-        id_contact_text.setText(String.valueOf(contact.getId()));
-        provider_contact_phone.setText(contact.getTelephone());
 
     }//GEN-LAST:event_modify_provider_contactActionPerformed
 
@@ -428,30 +435,40 @@ public class VDetailsProvider extends javax.swing.JFrame {
     }//GEN-LAST:event_provider_contact_firstnameActionPerformed
 
     private void modify_providerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modify_providerActionPerformed
-        MProvider pro = new MProvider();
-        pro.setProvider_id(parseInt(provider_id_text.getText()));
-        pro.setProvider_name(provider_name.getText());
-        pro.setProvider_adress(provider_adress.getText());
-        String to_parse = provider_contact_choice.getSelectedItem();
-        String[] id_contact = to_parse.split("-");
-        int id_contact_to_db = parseInt(id_contact[0]);
-        pro.setProvider_id_contact(id_contact_to_db);
-        try {
-            DBProvider.updateProvider(pro);
-        } catch (SQLException ex) {
-            Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
+
+        Validator val = new Validator();
+        if (val.stringEntry(provider_name.getText()) && (val.stringEntry(provider_adress.getText()))) {
+
+            MProvider pro = new MProvider();
+            pro.setProvider_id(parseInt(provider_id_text.getText()));
+            pro.setProvider_name(provider_name.getText());
+            pro.setProvider_adress(provider_adress.getText());
+            String to_parse = provider_contact_choice.getSelectedItem();
+            String[] id_contact = to_parse.split("-");
+            int id_contact_to_db = parseInt(id_contact[0]);
+            pro.setProvider_id_contact(id_contact_to_db);
+            try {
+                DBProvider.updateProvider(pro);
+            } catch (SQLException ex) {
+                Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                reload_contact_provider();
+            } catch (SQLException ex) {
+                Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                reload_provider();
+            } catch (SQLException ex) {
+                Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            modify_provider_label.setText("Modification effectuée");
+        } else {
+            String message = "Merci de saisir un nom et une adresse valide";
+            VError error = new VError(message);
+            error.setVisible(true);
         }
-        try {
-            reload_contact_provider();
-        } catch (SQLException ex) {
-            Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            reload_provider();
-        } catch (SQLException ex) {
-            Logger.getLogger(VDetailsProvider.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        modify_provider_label.setText("Modification effectuée");
+
     }//GEN-LAST:event_modify_providerActionPerformed
 
     private void delete_provider_contactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_provider_contactActionPerformed

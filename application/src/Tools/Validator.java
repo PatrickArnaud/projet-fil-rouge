@@ -5,9 +5,9 @@ public class Validator {
     public boolean stringEntry(String entry) {
         boolean result = false;
         int lenght = entry.length();
-        if (lenght <3) {
+        if (lenght <2) {
             System.out.println("trop petit");
-        } else if(lenght>30) {
+        } else if(lenght>150) {
             System.out.println("nop");
         } else {
             result = true;

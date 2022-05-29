@@ -14,6 +14,7 @@ import FilRouge.Model.MLogin;
 import FilRouge.Model.MOrder;
 import FilRouge.Model.MProvider;
 import FilRouge.Model.MUser;
+import Tools.Validator;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -452,14 +453,16 @@ public class VMain extends javax.swing.JFrame {
                     .addComponent(jLabel11))
                 .addGap(38, 38, 38)
                 .addGroup(articleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(add_article_message, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                    .addGroup(articleLayout.createSequentialGroup()
+                        .addGap(279, 279, 279)
+                        .addComponent(add_article_message, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE))
                     .addComponent(add_article_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(add_product_name, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(add_article_provider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(add_article_type, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
-                    .addComponent(add_article_status, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
-                    .addComponent(add_article_origin, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
+                    .addComponent(add_article_type, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
+                    .addComponent(add_article_status, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
+                    .addComponent(add_article_origin, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(articleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(articleLayout.createSequentialGroup()
@@ -748,7 +751,8 @@ public class VMain extends javax.swing.JFrame {
             }
         });
 
-        role_toadd.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Super Admin", "Administrateur", "Employé", " ", " " }));
+        role_toadd.setMaximumRowCount(3);
+        role_toadd.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Super Admin", "Administrateur", "Employé" }));
 
         add_user_btn.setBackground(new java.awt.Color(51, 51, 51));
         add_user_btn.setForeground(new java.awt.Color(204, 204, 204));
@@ -1058,28 +1062,36 @@ public class VMain extends javax.swing.JFrame {
     //add an article
     private void add_article_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_article_buttonActionPerformed
         MArticles art = new MArticles();
-        art.setName(add_product_name.getText());
-        art.setProvider(add_article_provider.getSelectedItem());
-        art.setStatus_article(add_article_status.getSelectedItem());
-        art.setType(add_article_type.getSelectedItem());
-        art.setOrigin(add_article_origin.getSelectedItem());
-        art.setId_user(DBProvider.getProvidersIdByNameFromDB(add_article_provider.getSelectedItem()));
-        try {
-            DBArticle.addArticleToDB(art, parseInt(id_user.getText()));
-        } catch (SQLException ex) {
-            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        Validator val = new Validator();
+        if (val.stringEntry(add_product_name.getText())) {
+            art.setName(add_product_name.getText());
+            art.setProvider(add_article_provider.getSelectedItem());
+            art.setStatus_article(add_article_status.getSelectedItem());
+            art.setType(add_article_type.getSelectedItem());
+            art.setOrigin(add_article_origin.getSelectedItem());
+            art.setId_user(DBProvider.getProvidersIdByNameFromDB(add_article_provider.getSelectedItem()));
+            try {
+                DBArticle.addArticleToDB(art, parseInt(id_user.getText()));
+            } catch (SQLException ex) {
+                Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                load_article_without_listener();
+            } catch (SQLException ex) {
+                Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            add_article_message.setText("Ajout de " + art.getName() + " Effectué");
+            try {
+                reload_article_command();
+            } catch (SQLException ex) {
+                Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            String message = "Merci de saisir un article avec une longueur de texte valide";
+            VError error = new VError(message);
+            error.setVisible(true);
         }
-        try {
-            load_article_without_listener();
-        } catch (SQLException ex) {
-            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        add_article_message.setText("Ajout de " + art.getName() + " Effectué");
-        try {
-            reload_article_command();
-        } catch (SQLException ex) {
-            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
     }//GEN-LAST:event_add_article_buttonActionPerformed
 
     private void add_product_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_product_nameActionPerformed
@@ -1138,23 +1150,31 @@ public class VMain extends javax.swing.JFrame {
     }//GEN-LAST:event_username_fieldActionPerformed
 
     private void add_contactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_contactActionPerformed
-        MContact contact = new MContact();
-        contact.setLastname(lastname_contact.getText());
-        contact.setFirstname(firstname_contact.getText());
-        contact.setTelephone(telephone_contact.getText());
-        try {
-            DBContact.addContactToDB(contact);
-        } catch (SQLException ex) {
-            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        contact_added.setText("Contact ajouté.");
-        choice_contact.removeAll();
-        try {
-            load_contact_provider();
-        } catch (SQLException ex) {
-            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
+        Validator val = new Validator();
+        if (val.stringEntry(lastname_contact.getText()) && val.stringEntry(firstname_contact.getText()) && val.numericEntry(Float.valueOf(telephone_contact.getText()))) {
+            MContact contact = new MContact();
+            contact.setLastname(lastname_contact.getText());
+            contact.setFirstname(firstname_contact.getText());
+            contact.setTelephone(telephone_contact.getText());
+            try {
+                DBContact.addContactToDB(contact);
+            } catch (SQLException ex) {
+                Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            contact_added.setText("Contact ajouté.");
+            choice_contact.removeAll();
+            try {
+                load_contact_provider();
+            } catch (SQLException ex) {
+                Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+            String message = "Merci de saisir un nom, prénom et téléphone valide";
+            VError error = new VError(message);
+            error.setVisible(true);
+        }
     }//GEN-LAST:event_add_contactActionPerformed
 
     private void provider_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_provider_nameActionPerformed
@@ -1167,25 +1187,31 @@ public class VMain extends javax.swing.JFrame {
 
     private void add_provider_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_provider_buttonActionPerformed
 
-        MProvider pro = new MProvider();
-        pro.setProvider_name(provider_name.getText());
-        pro.setProvider_adress(provider_adress.getText());
-        String to_parse = choice_contact.getSelectedItem();
-        String id_contact[] = to_parse.split("-");
-        int id_contact_to_db = parseInt(id_contact[0]);
-        pro.setProvider_id_contact(id_contact_to_db);
-        try {
-            DBProvider.addProviderToDB(pro);
-        } catch (SQLException ex) {
-            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        Validator val = new Validator();
+        if (val.stringEntry(provider_name.getText()) && val.stringEntry(provider_adress.getText())) {
+            MProvider pro = new MProvider();
+            pro.setProvider_name(provider_name.getText());
+            pro.setProvider_adress(provider_adress.getText());
+            String to_parse = choice_contact.getSelectedItem();
+            String id_contact[] = to_parse.split("-");
+            int id_contact_to_db = parseInt(id_contact[0]);
+            pro.setProvider_id_contact(id_contact_to_db);
+            try {
+                DBProvider.addProviderToDB(pro);
+            } catch (SQLException ex) {
+                Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                load_provider_without_listener();
+            } catch (SQLException ex) {
+                Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            provider_added.setText("Fournisseur " + pro.getProvider_name() + " ajouté");
+        } else {
+            String message = "Merci de saisir un nom et une adresse valide";
+            VError error = new VError(message);
+            error.setVisible(true);
         }
-        try {
-            load_provider_without_listener();
-        } catch (SQLException ex) {
-            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        provider_added.setText("Fournisseur " + pro.getProvider_name() + " ajouté");
-
     }//GEN-LAST:event_add_provider_buttonActionPerformed
 
     private void username_toaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_username_toaddActionPerformed
@@ -1197,36 +1223,43 @@ public class VMain extends javax.swing.JFrame {
     }//GEN-LAST:event_user_password_toaddActionPerformed
 
     private void add_user_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_user_btnActionPerformed
-        MUser user = new MUser();
-        user.setUsername(username_toadd.getText());
-        user.setPassword(user_password_toadd.getText());
-        String role = (String) role_toadd.getSelectedItem();
-        int role_id;
-        if (role == "Super Admin") {
-            role_id = 1;
-        } else if (role == "Administrateur") {
-            role_id = 2;
-        } else {
-            role_id = 3;
-        }
-        user.setRole(role_id);
-        try {
-            DBUser.addUserToDB(user);
+        Validator val = new Validator();
 
-// TODO add your handling code here:
-        } catch (SQLException ex) {
-            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+        if (val.stringEntry(username_toadd.getText()) && val.stringEntry(user_password_toadd.getText())) {
+            MUser user = new MUser();
+            user.setUsername(username_toadd.getText());
+            user.setPassword(user_password_toadd.getText());
+            String role = (String) role_toadd.getSelectedItem();
+            int role_id;
+            if (role == "Super Admin") {
+                role_id = 1;
+            } else if (role == "Administrateur") {
+                role_id = 2;
+            } else {
+                role_id = 3;
+            }
+            user.setRole(role_id);
+            try {
+                DBUser.addUserToDB(user);
+            } catch (SQLException ex) {
+                Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                load_users();
+            } catch (SQLException ex) {
+                Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                load_user_list_to_delete();
+            } catch (SQLException ex) {
+                Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            String message = "Merci de saisir un nom d'utilisateur et/ou un mot de passe avec une longueur de texte valide";
+            VError error = new VError(message);
+            error.setVisible(true);
         }
-        try {
-            load_users();
-        } catch (SQLException ex) {
-            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            load_user_list_to_delete();
-        } catch (SQLException ex) {
-            Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
     }//GEN-LAST:event_add_user_btnActionPerformed
 
     private void delete_user_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_user_btnActionPerformed
@@ -1473,21 +1506,17 @@ public class VMain extends javax.swing.JFrame {
             MOrder add = new MOrder();
             add = arr.get(i);
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            Date date = new Date();
             String dateToStr = dateFormat.format(add.getCreation_date());
             String show[] = {String.valueOf(add.getId_order()), add.getArticle().getName(), add.getStatus(), dateToStr};
             table.addRow(show);
         }
     }
-    
-    
 
     public void load_order_tracking_without_listener() throws SQLException {
         ArrayList<MOrder> arr = new ArrayList<>();
         DefaultTableModel model = (DefaultTableModel) order_tracking.getModel();
         model.setRowCount(0);
         order_tracking.setAutoCreateRowSorter(true);
-        //event listener for modify
         arr = DBOrder.GetOrdersFromDB();
         DefaultTableModel table = (DefaultTableModel) order_tracking.getModel();
         for (int i = 0; i < arr.size(); i++) {

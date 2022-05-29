@@ -4,6 +4,7 @@ import FilRouge.Controlleur.DBArticle;
 import FilRouge.Controlleur.DBLogin;
 import FilRouge.Controlleur.DBProvider;
 import FilRouge.Model.MArticles;
+import Tools.Validator;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -21,7 +22,6 @@ public class VDetails extends javax.swing.JFrame {
         this.jtable = jtable;
         this.command_table = command_table;
         initComponents();
-        System.out.println(article.toString());
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         id_article_details.setText(String.valueOf(article.getId()));
         product_name_details.setText(article.getName());
@@ -37,6 +37,7 @@ public class VDetails extends javax.swing.JFrame {
             type_details.add("Ustensile");
         }
         ini_v_details();
+
     }
 
     public void load_article_search(ArrayList<MArticles> arr, JTable jtable) {
@@ -44,7 +45,6 @@ public class VDetails extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jtable.getModel();
         model.setRowCount(0);
         jtable.setAutoCreateRowSorter(true);
-        //event listener for modify
         DefaultTableModel table = (DefaultTableModel) jtable.getModel();
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
@@ -101,6 +101,7 @@ public class VDetails extends javax.swing.JFrame {
         });
 
         brand_details.setBackground(new java.awt.Color(51, 51, 51));
+        brand_details.setEditable(false);
         brand_details.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 brand_detailsActionPerformed(evt);
@@ -297,22 +298,29 @@ public class VDetails extends javax.swing.JFrame {
 
     private void modifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyActionPerformed
 
-        MArticles up = new MArticles();
-        up.setId(Integer.parseInt(id_article_details.getText()));
-        up.setName(product_name_details.getText());
-        up.setOrigin(origin_details.getSelectedItem());
-        up.setStatus_article(disponibility_details.getSelectedItem());
-        up.setProvider(provider_details.getSelectedItem());
-        up.setType(type_details.getSelectedItem());
-        System.out.println("détail :" + up.toString());
-        try {
-            DBArticle.updateArticleToDB(up);
-        } catch (SQLException ex) {
-            Logger.getLogger(VDetails.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        reload_articles();
-        reload_articles_command();
+        Validator val = new Validator();
+        if (val.stringEntry(product_name_details.getText())) {
+            MArticles up = new MArticles();
+            up.setId(Integer.parseInt(id_article_details.getText()));
+            up.setName(product_name_details.getText());
+            up.setOrigin(origin_details.getSelectedItem());
+            up.setStatus_article(disponibility_details.getSelectedItem());
+            up.setProvider(provider_details.getSelectedItem());
+            up.setType(type_details.getSelectedItem());
+            System.out.println("détail :" + up.toString());
+            try {
+                DBArticle.updateArticleToDB(up);
+            } catch (SQLException ex) {
+                Logger.getLogger(VDetails.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
+            reload_articles();
+            reload_articles_command();
+        } else {
+            String message = "Merci de saisir un nom et une adresse valide";
+            VError error = new VError(message);
+            error.setVisible(true);
+        }
     }//GEN-LAST:event_modifyActionPerformed
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
@@ -384,33 +392,43 @@ public class VDetails extends javax.swing.JFrame {
         provider_array = DBProvider.getProvidersArrayListFromDB();
         for (int i = 0; i < provider_array.size(); i++) {
             String to_add = (String) provider_array.get(i);
-            provider_details.add(to_add);
+            if (provider_details.getSelectedItem().equals(to_add)) {
+                System.out.println("je fais rien");
+            } else {
+                System.out.println(i);
+                provider_details.add(to_add);
+            }
         }
 
     }
 
     public void load_add_article_type() {
 
-        type_details.add("Ustensile");
-        type_details.add("Ingredient");
-
+        if (type_details.getSelectedItem().equals("Ustensile")) {
+            type_details.add("Ingredient");
+        } else {
+            type_details.add("Ustensile");
+        }
     }
 
     public void load_add_article_status() {
 
-        disponibility_details.add("Disponible");
-        disponibility_details.add("Indisponible");
-
+        if (disponibility_details.getSelectedItem().equals("Disponible")) {
+            disponibility_details.add("Indisponible");
+        } else {
+            disponibility_details.add("Disponible");
+        }
     }
 
     public void load_add_article_origin() {
-
-        origin_details.add("France");
-        origin_details.add("Allemagne");
-        origin_details.add("Espagne");
-        origin_details.add("Italie");
-        origin_details.add("Belgique");
-
+        String[] tab = {"France", "Allemagne", "Espagne", "Italie", "Belgique"};
+        for (int i = 0; i < tab.length; i++) {
+            if (origin_details.getSelectedItem().equals(tab[i])) {
+                System.out.println("nope");
+            } else {
+                origin_details.add(tab[i]);
+            }
+        }
     }
 
     public void ini_v_details() {
