@@ -1,17 +1,23 @@
 package FilRouge.View;
 
+import FilRouge.Controlleur.DBArticle;
+import static FilRouge.Controlleur.DBArticle.getArticlesForCommandFromDB;
 import FilRouge.Controlleur.DBOrder;
+import FilRouge.Controlleur.DBProvider;
 import FilRouge.Model.MArticles;
 import FilRouge.Model.MOrder;
 import Tools.Validator;
 import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class VDetailsCommand extends javax.swing.JFrame {
 
@@ -242,7 +248,7 @@ public class VDetailsCommand extends javax.swing.JFrame {
                 order.setQuantity(parseFloat(quantity_field.getText()));
                 order.setPrice(parseFloat(price_field.getText()));
                 order.setId_user(parseInt(id_user.getText()));
-                order.setArticle(article);
+                order.setArticle(article);                
                 try {
                     DBOrder.addCommandToDB(order);
                 } catch (SQLException ex) {
@@ -253,8 +259,32 @@ public class VDetailsCommand extends javax.swing.JFrame {
                 VError error = new VError(message);
                 error.setVisible(true);
             }
-        }
     }//GEN-LAST:event_command_buttonActionPerformed
+        try {
+            load_order_tracking_without_listener();
+        } catch (SQLException ex) {
+            Logger.getLogger(VDetailsCommand.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void load_order_tracking_without_listener() throws SQLException {
+        ArrayList<MOrder> arr = new ArrayList<>();
+        DefaultTableModel model = (DefaultTableModel) jtable.getModel();
+        model.setRowCount(0);
+        jtable.setAutoCreateRowSorter(true);
+        arr = DBOrder.GetOrdersFromDB();
+        DefaultTableModel table = (DefaultTableModel) jtable.getModel();
+        for (int i = 0; i < arr.size(); i++) {
+            MOrder add = new MOrder();
+            add = arr.get(i);
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            String dateToStr = dateFormat.format(add.getCreation_date());
+            String show[] = {String.valueOf(add.getId_order()), add.getArticle().getName(), add.getStatus(), dateToStr};
+            table.addRow(show);
+        }
+
+    }
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
