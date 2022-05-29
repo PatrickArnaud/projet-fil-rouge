@@ -442,7 +442,7 @@ public class VDetails extends javax.swing.JFrame {
         ArrayList<MArticles> arr = new ArrayList();
 
         try {
-            arr = DBArticle.getArticlesFromDB();
+            arr = DBArticle.getArticlesForCommandFromDB();
         } catch (SQLException ex) {
             Logger.getLogger(VDetails.class.getName()).log(Level.SEVERE, null, ex);
         }
