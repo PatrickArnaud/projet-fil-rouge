@@ -5,14 +5,14 @@
         <group>
             <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/View/VMain.java</file>
             <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/Model/MLogin.java</file>
-            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/Tools/Validator.java</file>
-            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/Model/MProvider.java</file>
-            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/Controlleur/DBLogin.java</file>
+            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/Main/Main.java</file>
+            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/View/VLogin.java</file>
             <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/View/VDetails.java</file>
-            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/Controlleur/DBUser.java</file>
+            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/View/VDetailsCommand.java</file>
             <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/View/VOrder.java</file>
-            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/Model/MUser.java</file>
-            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/Controlleur/DBConnect.java</file>
+            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/View/VDetailsProvider.java</file>
+            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/Controlleur/DBArticle.java</file>
+            <file>file:/C:/Users/Patri/Desktop/filrouge/projet-fil-rouge/application/src/FilRouge/Model/MArticles.java</file>
         </group>
     </open-files>
 </project-private>
