@@ -2,6 +2,7 @@ package FilRouge.Model;
 
 import FilRouge.Controlleur.DBArticle;
 import FilRouge.Controlleur.DBConnect;
+import static FilRouge.Model.MArticles.cnx;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -458,4 +459,29 @@ public class MOrder {
         return false;
     }
 
+    
+     static public ArrayList searchCommand(String search) throws SQLException {
+        ArrayList<MArticles> arr = new ArrayList<>();
+        MArticles art = null;
+        try {
+
+            String query = "SELECT  id_order, status_order , creation_date , id_user FROM nesti_order WHERE name_article = '" + search +"'";
+            Statement smt = cnx.createStatement();
+            ResultSet resultSet = smt.executeQuery(query);
+            while (resultSet.next()) {
+                art = new MArticles();
+                art.setId(resultSet.getInt(1));
+                art.setName(resultSet.getString(2));
+                art.setBrand(resultSet.getString(3));
+                art.setProvider(resultSet.getString(4));
+                art.setStatus_article(resultSet.getString(5));
+                arr.add(art);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            return arr;
+        }
+
+    }
 }

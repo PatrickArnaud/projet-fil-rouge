@@ -5,6 +5,7 @@
  */
 package FilRouge.View;
 
+import FilRouge.Controlleur.DBLogin;
 import FilRouge.Controlleur.DBOrder;
 import FilRouge.Model.MOrder;
 import java.sql.SQLException;
@@ -22,11 +23,15 @@ public class VOrder extends javax.swing.JFrame {
     JTable jtable;
     MOrder order;
 
-    public VOrder(JTable jtable, MOrder order) {
+    public VOrder(JTable jtable, MOrder order, int id_user) {
         this.jtable = jtable;
         this.order = order;
         initComponents();
         launch(order);
+       int role = DBLogin.getRoleUser(id_user);
+        if(role == 3) {
+            change_status_btn.setVisible(false);
+        }
 
     }
 

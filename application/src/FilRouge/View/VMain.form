@@ -873,9 +873,8 @@
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="jLabel29" min="-2" pref="140" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                  <Component id="search_batch" min="-2" pref="165" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="367" max="-2" attributes="0"/>
+                                  <Component id="error_mesasge_search_command" min="-2" pref="162" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jLabel26" alignment="0" min="-2" pref="302" max="-2" attributes="0"/>
                               <Component id="jScrollPane7" alignment="0" min="-2" pref="675" max="-2" attributes="0"/>
@@ -904,8 +903,7 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="search_article_for_command" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel28" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel29" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="search_batch" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="error_mesasge_search_command" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -1015,22 +1013,14 @@
                     <Property name="text" type="java.lang.String" value="Rechercher article"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jLabel29">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Rechercher commande"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="search_batch">
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="search_batchActionPerformed"/>
-                  </Events>
-                </Component>
                 <Component class="javax.swing.JLabel" name="jLabel30">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Doucle cliquez sur l&apos;article souhait&#xe9; pour passer une commande"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="research_command_message">
+                </Component>
+                <Component class="javax.swing.JLabel" name="error_mesasge_search_command">
                 </Component>
               </SubComponents>
             </Container>

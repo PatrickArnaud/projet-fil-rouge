@@ -1,9 +1,8 @@
 package FilRouge.View;
 
-import FilRouge.Controlleur.DBArticle;
-import static FilRouge.Controlleur.DBArticle.getArticlesForCommandFromDB;
+
+import FilRouge.Controlleur.DBLogin;
 import FilRouge.Controlleur.DBOrder;
-import FilRouge.Controlleur.DBProvider;
 import FilRouge.Model.MArticles;
 import FilRouge.Model.MOrder;
 import Tools.Validator;
@@ -22,20 +21,26 @@ import javax.swing.table.DefaultTableModel;
 public class VDetailsCommand extends javax.swing.JFrame {
 
     JTable jtable;
+    JTable order_tracking;
     MArticles article;
 
-    public VDetailsCommand(MArticles article, JTable jtable, int id_user_to) throws SQLException {
+    public VDetailsCommand(MArticles article, JTable jtable,JTable order_tracking, int id_user_to) throws SQLException {
         initComponents();
         load_packaging();
         load_unit();
         this.article = article;
         this.jtable = jtable;
+        this.order_tracking= order_tracking;
         name_art_tc.setText(article.getName());
         provider_art_tc.setText(article.getProvider());
         origin_art_tc.setText(article.getOrigin());
         String id = String.valueOf(id_user_to);
         id_user.setText(id);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        int role = DBLogin.getRoleUser(id_user_to);
+        if (role == 3) {
+            command_button.setVisible(false);
+        }
 
     }
 
@@ -229,7 +234,7 @@ public class VDetailsCommand extends javax.swing.JFrame {
 
         Validator val = new Validator();
         if ("".equals(quantity_field.getText()) && "".equals(price_field.getText())) {
-            String message = "Merci de saisir un nom et une adresse valide";
+            String message = "Merci de saisir une quantité et un prix valide";
             VError error = new VError(message);
             error.setVisible(true);
         } else {
@@ -261,6 +266,7 @@ public class VDetailsCommand extends javax.swing.JFrame {
             }
     }//GEN-LAST:event_command_buttonActionPerformed
         try {
+            System.out.println("ici");
             load_order_tracking_without_listener();
         } catch (SQLException ex) {
             Logger.getLogger(VDetailsCommand.class.getName()).log(Level.SEVERE, null, ex);
@@ -270,11 +276,11 @@ public class VDetailsCommand extends javax.swing.JFrame {
 
     public void load_order_tracking_without_listener() throws SQLException {
         ArrayList<MOrder> arr = new ArrayList<>();
-        DefaultTableModel model = (DefaultTableModel) jtable.getModel();
+        DefaultTableModel model = (DefaultTableModel) order_tracking.getModel();
         model.setRowCount(0);
-        jtable.setAutoCreateRowSorter(true);
+        order_tracking.setAutoCreateRowSorter(true);
         arr = DBOrder.GetOrdersFromDB();
-        DefaultTableModel table = (DefaultTableModel) jtable.getModel();
+        DefaultTableModel table = (DefaultTableModel) order_tracking.getModel();
         for (int i = 0; i < arr.size(); i++) {
             MOrder add = new MOrder();
             add = arr.get(i);
@@ -286,37 +292,37 @@ public class VDetailsCommand extends javax.swing.JFrame {
 
     }
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VDetailsCommand.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VDetailsCommand.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VDetailsCommand.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VDetailsCommand.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                //   new VDetailsCommand().setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(VDetailsCommand.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(VDetailsCommand.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(VDetailsCommand.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(VDetailsCommand.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                //   new VDetailsCommand().setVisible(true);
+//            }
+//        });
+//    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

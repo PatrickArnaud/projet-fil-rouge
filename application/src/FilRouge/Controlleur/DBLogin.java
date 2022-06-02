@@ -50,5 +50,22 @@ public class DBLogin {
         }
 
     }
+    
+    static public int getRoleUser(int id) {
+        int user_role = 0;
+        try {
+            String query = "SELECT  id_role FROM nesti_user WHERE  id_user ='" + id + "'";
+            Statement smt = cnx.createStatement();
+            ResultSet resultSet = smt.executeQuery(query);
+            while (resultSet.next()) {
+                user_role = resultSet.getInt(1);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            return user_role;
+        }
+
+    }
 
 }

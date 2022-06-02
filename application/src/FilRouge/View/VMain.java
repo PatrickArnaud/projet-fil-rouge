@@ -23,7 +23,6 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -104,10 +103,9 @@ public class VMain extends javax.swing.JFrame {
         jTable4 = new javax.swing.JTable();
         search_article_for_command = new javax.swing.JTextField();
         jLabel28 = new javax.swing.JLabel();
-        jLabel29 = new javax.swing.JLabel();
-        search_batch = new javax.swing.JTextField();
         jLabel30 = new javax.swing.JLabel();
         research_command_message = new javax.swing.JLabel();
+        error_mesasge_search_command = new javax.swing.JLabel();
         administration = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
@@ -609,14 +607,6 @@ public class VMain extends javax.swing.JFrame {
 
         jLabel28.setText("Rechercher article");
 
-        jLabel29.setText("Rechercher commande");
-
-        search_batch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                search_batchActionPerformed(evt);
-            }
-        });
-
         jLabel30.setText("Doucle cliquez sur l'article souhaité pour passer une commande");
 
         javax.swing.GroupLayout command1Layout = new javax.swing.GroupLayout(command1);
@@ -637,9 +627,8 @@ public class VMain extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(command1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(command1Layout.createSequentialGroup()
-                        .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28)
-                        .addComponent(search_batch, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(367, 367, 367)
+                        .addComponent(error_mesasge_search_command, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 675, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(21, Short.MAX_VALUE))
@@ -662,8 +651,7 @@ public class VMain extends javax.swing.JFrame {
                     .addGroup(command1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(search_article_for_command, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel28)
-                        .addComponent(jLabel29)
-                        .addComponent(search_batch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(error_mesasge_search_command)))
                 .addGap(18, 18, 18)
                 .addGroup(command1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 537, Short.MAX_VALUE)
@@ -1131,6 +1119,7 @@ public class VMain extends javax.swing.JFrame {
                 tabbed_pane.add(command, "Commande");
                 tabbed_pane.removeTabAt(0);
                 init_v_main();
+                add_article_button.setVisible(false);
 
             } else {
                 error_message.setText("Mot de passe erroné ou nom d'utilisateur erroné");
@@ -1283,10 +1272,6 @@ public class VMain extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_delete_user_btnActionPerformed
 
-    private void search_batchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_batchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_search_batchActionPerformed
-
     private void search_article_for_commandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_article_for_commandActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_search_article_for_commandActionPerformed
@@ -1296,6 +1281,9 @@ public class VMain extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_article_search_for_commandActionPerformed
 
+                
+    
+    
     private void article_search_for_commandKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_article_search_for_commandKeyReleased
         try {
             load_article_search_for_command(DBArticle.searchArticlesForCcmmandFromDB(article_search_for_command.getText()));
@@ -1333,7 +1321,7 @@ public class VMain extends javax.swing.JFrame {
                         //by disponibility
                         art = DBArticle.getArticleByNameDetailsFromDB((String) article_list.getValueAt(row, 0));
                     }
-                    VDetails details = new VDetails(art, article_list, article_command_table);
+                    VDetails details = new VDetails(art, article_list, article_command_table, parseInt(id_user.getText()));
                     details.setVisible(true);
                 }
             }
@@ -1389,7 +1377,7 @@ public class VMain extends javax.swing.JFrame {
                     }
                     VDetailsCommand detailsCommand = null;
                     try {
-                        detailsCommand = new VDetailsCommand(art, article_command_table, parseInt(id_user.getText()));
+                        detailsCommand = new VDetailsCommand(art, article_command_table,order_tracking, parseInt(id_user.getText()));
                     } catch (SQLException ex) {
                         Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -1492,7 +1480,7 @@ public class VMain extends javax.swing.JFrame {
                         } else if (col == 3) {
                             ord = DBOrder.GetOrdersDetailsFromDB((String) order_tracking.getValueAt(row, 0));
                         }
-                        VOrder order = new VOrder(order_tracking, ord);
+                        VOrder order = new VOrder(order_tracking, ord,parseInt(id_user.getText()));
                         order.setVisible(true);
                     } catch (SQLException ex) {
                         Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
@@ -1575,6 +1563,25 @@ public class VMain extends javax.swing.JFrame {
         model.setRowCount(0);
         article_command_table.setAutoCreateRowSorter(true);
         DefaultTableModel table = (DefaultTableModel) article_command_table.getModel();
+        for (int i = 0; i < arr.size(); i++) {
+            MArticles add = new MArticles();
+            add = arr.get(i);
+            String show[] = {add.getName(), add.getBrand(), DBProvider.getProvidersByIdFromDB(DBProvider.getProvidersIdByIdArticleFromDB(add.getId())), DBArticle.getOriginByIdArticleFromDB(add.getId()), add.getStatus_article()};
+            table.addRow(show);
+        }
+
+    }
+
+    public void load_command_search_for_command(ArrayList<MArticles> arr) throws SQLException {
+        if (arr.size() == 0) {
+            error_mesasge_search_command.setText("Oups, il n'y a rien ici ...");
+        } else {
+            error_mesasge_search_command.setText("");
+        }
+        DefaultTableModel model = (DefaultTableModel) order_tracking.getModel();
+        model.setRowCount(0);
+        order_tracking.setAutoCreateRowSorter(true);
+        DefaultTableModel table = (DefaultTableModel) order_tracking.getModel();
         for (int i = 0; i < arr.size(); i++) {
             MArticles add = new MArticles();
             add = arr.get(i);
@@ -1738,6 +1745,7 @@ public class VMain extends javax.swing.JFrame {
     private javax.swing.JPanel command1;
     private javax.swing.JLabel contact_added;
     private java.awt.Button delete_user_btn;
+    private javax.swing.JLabel error_mesasge_search_command;
     private javax.swing.JLabel error_message;
     private javax.swing.JTextField firstname_contact;
     private javax.swing.JLabel id_user;
@@ -1763,7 +1771,6 @@ public class VMain extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
@@ -1804,7 +1811,6 @@ public class VMain extends javax.swing.JFrame {
     private javax.swing.JLabel research_command_message;
     private javax.swing.JComboBox<String> role_toadd;
     private javax.swing.JTextField search_article_for_command;
-    private javax.swing.JTextField search_batch;
     private javax.swing.JLabel statut;
     private javax.swing.JTabbedPane tabbed_pane;
     private javax.swing.JTextField telephone_contact;
