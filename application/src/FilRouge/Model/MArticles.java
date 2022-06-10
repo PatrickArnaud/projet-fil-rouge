@@ -24,8 +24,25 @@ public class MArticles {
     private String provider;
     private String status_article;
     private String type;
-    String origin;
+    private String origin;
     private int id_user;
+
+    public MArticles(int id, int id_supplier, String name, String brand, String 
+ provider, String status_article, String type, String origin, int id_user, Date creation_date) {
+        this.id = id;
+        this.id_supplier = id_supplier;
+        this.name = name;
+        this.brand = brand;
+        this.provider = provider;
+        this.status_article = status_article;
+        this.type = type;
+        this.origin = origin;
+        this.id_user = id_user;
+        this.creation_date = creation_date;
+    }
+    
+    
+    
 
     public int getId_supplier() {
         return id_supplier;
@@ -306,7 +323,7 @@ public class MArticles {
 
     static public MArticles getArticleById(int id) throws SQLException {
         MArticles art = new MArticles();
-       try {
+        try {
             String query = "SELECT  id_article, name_article , brand, creation_date, status_article, id_user FROM nesti_article WHERE id_article ='" + id + "'";
             Statement smt = cnx.createStatement();
             ResultSet resultSet = smt.executeQuery(query);
@@ -367,16 +384,19 @@ public class MArticles {
 
     }
 
+    //function to add an article
     static public boolean addArticle(MArticles art, int id_user) throws SQLException {
         boolean success = false;
         try {
+            //first step insert article
             String query = "INSERT INTO nesti_article (name_article,status_article,id_user,brand) VALUES(?,?,?,?)";
             PreparedStatement smt = cnx.prepareStatement(query);
             smt.setString(1, art.getName());
             smt.setString(2, art.getStatus_article());
             smt.setInt(3, id_user);
             smt.setString(4, "Nesti");
-            boolean executed = smt.executeUpdate() == 1;
+            smt.executeUpdate();
+            //second step insert into tools or ingredient
             if (art.getType() == "Ustensile") {
                 MArticles art_tool = getArticleByNameFromDB(art.getName());
                 String query_tool = "INSERT INTO nesti_tool (id_article) VALUES(?)";
@@ -390,6 +410,7 @@ public class MArticles {
                 smt_ingredient.setInt(1, art_ingredient.getId());
                 smt_ingredient.executeUpdate();
             }
+            //third step insert into sold by 
             String query_sold_by = "INSERT INTO sold_by (id_article,id_supplier,origin) VALUES(?,?,?)";
             PreparedStatement smt_sold_by = cnx.prepareStatement(query_sold_by);
             MArticles sold_by_id_article = getArticleByNameFromDB(art.getName());
@@ -397,11 +418,9 @@ public class MArticles {
             smt_sold_by.setInt(2, DBProvider.getProvidersIdByNameFromDB(art.getProvider()));
             smt_sold_by.setString(3, art.getOrigin());
             smt_sold_by.executeUpdate();
-            success = (executed);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
         return success;
     }
 

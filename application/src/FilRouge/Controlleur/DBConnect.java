@@ -5,11 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnect {
-
-    public static Connection connect() {
-        
+// class to link with the database :
+    public static Connection connect() {        
         Connection conn = null;
-
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conn = (Connection) DriverManager.

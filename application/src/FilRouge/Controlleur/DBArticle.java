@@ -44,8 +44,8 @@ public class DBArticle {
     /**
      * request to get all article for research
      *
-     * @param search String
-     * @return nothing
+     * @param search String 
+     * @return array of article searched
      * @throws SQLException sql
      */
     static public ArrayList searchArticlesFromDB(String search) throws SQLException {

@@ -19,7 +19,7 @@ public class Validator {
         boolean result = false;
         if (entry <= 0) {
             System.out.println("valeur négative ou nulle impossible");
-        } else if(entry>1000000) {
+        } else if(entry>10000000) {
             System.out.println("trop élevée");
         } else {
             System.out.println("ok");
