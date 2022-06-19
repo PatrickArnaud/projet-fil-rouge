@@ -1,6 +1,7 @@
 package FilRouge.View;
 
 import FilRouge.Controlleur.DBContact;
+import FilRouge.Controlleur.DBLogin;
 import FilRouge.Controlleur.DBProvider;
 import FilRouge.Model.MContact;
 import FilRouge.Model.MProvider;
@@ -20,7 +21,7 @@ public class VDetailsProvider extends javax.swing.JFrame {
     JTable jtable;
     Choice choice_contact;
 
-    public VDetailsProvider(MProvider pro, JTable jtable, Choice choice_contact) throws SQLException {
+    public VDetailsProvider(MProvider pro, JTable jtable, Choice choice_contact, int id_user) throws SQLException {
         this.jtable = jtable;
         this.choice_contact = choice_contact;
         initComponents();
@@ -33,7 +34,6 @@ public class VDetailsProvider extends javax.swing.JFrame {
         provider_name.setText(pro.getProvider_name());
         provider_adress.setText(pro.getProvider_adress());
         cont = DBContact.getContactByIdFromDB(pro.getProvider_id_contact());
-
         if (cont != null) {
             String contact = cont.toString();
             provider_contact_choice.add(contact);
@@ -52,7 +52,13 @@ public class VDetailsProvider extends javax.swing.JFrame {
             modify_provider_contact.setVisible(false);
             delete_provider_contact.setVisible(false);
         }
-
+         int role = DBLogin.getRoleUser(id_user);
+        if (role == 3) {
+            delete_provider.setVisible(false);
+            modify_provider.setVisible(false);
+            modify_provider_contact.setVisible(false);
+            delete_provider_contact.setVisible(false);            
+        }
         load_contact_provider();
 
     }
@@ -508,7 +514,6 @@ public class VDetailsProvider extends javax.swing.JFrame {
         modify_provider_label.setText("Suppression effectuée");
     }//GEN-LAST:event_delete_providerActionPerformed
 
-   
 //    public static void main(String args[]) {
 //        /* Set the Nimbus look and feel */
 //        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

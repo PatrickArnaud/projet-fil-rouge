@@ -1,14 +1,19 @@
 package Tools;
 
-public class Validator {
 
+public class Validator {
+    /**
+     * validate the value of input String
+     * @param entry String
+     * @return result a boolean 
+     */
     public boolean stringEntry(String entry) {
         boolean result = false;
         int lenght = entry.length();
         if (lenght <2) {
-            System.out.println("trop petit");
+            System.out.println("Too small");
         } else if(lenght>150) {
-            System.out.println("nop");
+            System.out.println("Too long");
         } else {
             result = true;
         }

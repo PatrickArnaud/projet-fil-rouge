@@ -32,7 +32,7 @@ public class VMain extends javax.swing.JFrame {
 
     public VMain() {
         initComponents();
-        ImageIcon icon = new ImageIcon("C:\\Users\\Patri\\Desktop\\filrouge\\projet-fil-rouge\\application\\src\\FilRouge\\Assets\\NESTI.png");
+        ImageIcon icon = new ImageIcon("C:\\Users\\Patri\\Desktop\\Dossiers\\filrouge\\projet-fil-rouge\\application\\src\\FilRouge\\Assets\\NESTI.png");
         this.setIconImage(icon.getImage());
         tabbed_pane.removeTabAt(5);
         tabbed_pane.removeTabAt(4);
@@ -1059,7 +1059,7 @@ public class VMain extends javax.swing.JFrame {
             art.setOrigin(add_article_origin.getSelectedItem());
             art.setId_user(DBProvider.getProvidersIdByNameFromDB(add_article_provider.getSelectedItem()));
             try {
-                DBArticle.addArticleToDB(art, parseInt(id_user.getText()));
+                DBArticle.addArticleToDB(art, parseInt(id_user.getText()), add_article_message);
             } catch (SQLException ex) {
                 Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1068,7 +1068,6 @@ public class VMain extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
             }
-            add_article_message.setText("Ajout de " + art.getName() + " Effectué");
             try {
                 reload_article_command();
             } catch (SQLException ex) {
@@ -1117,9 +1116,12 @@ public class VMain extends javax.swing.JFrame {
                 tabbed_pane.add(profile, "Profil");
                 tabbed_pane.add(article, "Article");
                 tabbed_pane.add(command, "Commande");
+                tabbed_pane.add(provider, "Fournisseur");
                 tabbed_pane.removeTabAt(0);
                 init_v_main();
                 add_article_button.setVisible(false);
+                add_provider_button.setVisible(false);
+                add_contact.setVisible(false);
 
             } else {
                 error_message.setText("Mot de passe erroné ou nom d'utilisateur erroné");
@@ -1281,9 +1283,7 @@ public class VMain extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_article_search_for_commandActionPerformed
 
-                
-    
-    
+
     private void article_search_for_commandKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_article_search_for_commandKeyReleased
         try {
             load_article_search_for_command(DBArticle.searchArticlesForCcmmandFromDB(article_search_for_command.getText()));
@@ -1377,7 +1377,7 @@ public class VMain extends javax.swing.JFrame {
                     }
                     VDetailsCommand detailsCommand = null;
                     try {
-                        detailsCommand = new VDetailsCommand(art, article_command_table,order_tracking, parseInt(id_user.getText()));
+                        detailsCommand = new VDetailsCommand(art, article_command_table, order_tracking, parseInt(id_user.getText()));
                     } catch (SQLException ex) {
                         Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -1439,7 +1439,8 @@ public class VMain extends javax.swing.JFrame {
                             //by origin
                             pro = DBProvider.getProviderByNameFromDB((String) provider_list.getValueAt(row, 0));
                         }
-                        VDetailsProvider details_provider = new VDetailsProvider(pro, provider_list, choice_contact);
+                       int id_user_to = parseInt(id_user.getText());
+                        VDetailsProvider details_provider = new VDetailsProvider(pro, provider_list, choice_contact, id_user_to);
                         details_provider.setVisible(true);
                     } catch (SQLException ex) {
                         Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);
@@ -1480,7 +1481,7 @@ public class VMain extends javax.swing.JFrame {
                         } else if (col == 3) {
                             ord = DBOrder.GetOrdersDetailsFromDB((String) order_tracking.getValueAt(row, 0));
                         }
-                        VOrder order = new VOrder(order_tracking, ord,parseInt(id_user.getText()));
+                        VOrder order = new VOrder(order_tracking, ord, parseInt(id_user.getText()));
                         order.setVisible(true);
                     } catch (SQLException ex) {
                         Logger.getLogger(VMain.class.getName()).log(Level.SEVERE, null, ex);

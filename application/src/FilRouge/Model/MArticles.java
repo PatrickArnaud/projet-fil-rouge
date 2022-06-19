@@ -27,8 +27,7 @@ public class MArticles {
     private String origin;
     private int id_user;
 
-    public MArticles(int id, int id_supplier, String name, String brand, String 
- provider, String status_article, String type, String origin, int id_user, Date creation_date) {
+    public MArticles(int id, int id_supplier, String name, String brand, String provider, String status_article, String type, String origin, int id_user, Date creation_date) {
         this.id = id;
         this.id_supplier = id_supplier;
         this.name = name;
@@ -40,9 +39,6 @@ public class MArticles {
         this.id_user = id_user;
         this.creation_date = creation_date;
     }
-    
-    
-    
 
     public int getId_supplier() {
         return id_supplier;
@@ -385,18 +381,62 @@ public class MArticles {
     }
 
     //function to add an article
+//    static public boolean addArticle(MArticles art, int id_user) throws SQLException {
+//        boolean success = false;
+//        try {
+//            //first step insert article
+//            String query = "INSERT INTO nesti_article (name_article,status_article,id_user,brand) VALUES(?,?,?,?)";
+//            PreparedStatement smt = cnx.prepareStatement(query);
+//            smt.setString(1, art.getName());
+//            smt.setString(2, art.getStatus_article());
+//            smt.setInt(3, id_user);
+//            smt.setString(4, "Nesti");
+//            smt.executeUpdate();
+//            //second step insert into tools or ingredient
+//            if (art.getType() == "Ustensile") {
+//                MArticles art_tool = getArticleByNameFromDB(art.getName());
+//                String query_tool = "INSERT INTO nesti_tool (id_article) VALUES(?)";
+//                PreparedStatement smt_tool = cnx.prepareStatement(query_tool);
+//                smt_tool.setInt(1, art_tool.getId());
+//                smt_tool.executeUpdate();
+//            } else {
+//                MArticles art_ingredient = getArticleByNameFromDB(art.getName());
+//                String query_ingredient = "INSERT INTO nesti_ingredient (id_article) VALUES(?)";
+//                PreparedStatement smt_ingredient = cnx.prepareStatement(query_ingredient);
+//                smt_ingredient.setInt(1, art_ingredient.getId());
+//                smt_ingredient.executeUpdate();
+//            }
+//            //third step insert into sold by 
+//            String query_sold_by = "INSERT INTO sold_by (id_article,id_supplier,origin) VALUES(?,?,?)";
+//            PreparedStatement smt_sold_by = cnx.prepareStatement(query_sold_by);
+//            MArticles sold_by_id_article = getArticleByNameFromDB(art.getName());
+//            smt_sold_by.setInt(1, sold_by_id_article.getId());
+//            smt_sold_by.setInt(2, DBProvider.getProvidersIdByNameFromDB(art.getProvider()));
+//            smt_sold_by.setString(3, art.getOrigin());
+//            smt_sold_by.executeUpdate();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//        return success;
+//    }
+    /**
+     * transaction to add an article in database
+     * @param art 
+     * @param id_user
+     * @return boolean
+     * @throws SQLException
+     */
     static public boolean addArticle(MArticles art, int id_user) throws SQLException {
-        boolean success = false;
+        boolean success = true;
+        cnx.setAutoCommit(false);
         try {
-            //first step insert article
             String query = "INSERT INTO nesti_article (name_article,status_article,id_user,brand) VALUES(?,?,?,?)";
             PreparedStatement smt = cnx.prepareStatement(query);
             smt.setString(1, art.getName());
             smt.setString(2, art.getStatus_article());
             smt.setInt(3, id_user);
             smt.setString(4, "Nesti");
-            smt.executeUpdate();
-            //second step insert into tools or ingredient
+            boolean executed = smt.executeUpdate() == 1;
             if (art.getType() == "Ustensile") {
                 MArticles art_tool = getArticleByNameFromDB(art.getName());
                 String query_tool = "INSERT INTO nesti_tool (id_article) VALUES(?)";
@@ -410,7 +450,6 @@ public class MArticles {
                 smt_ingredient.setInt(1, art_ingredient.getId());
                 smt_ingredient.executeUpdate();
             }
-            //third step insert into sold by 
             String query_sold_by = "INSERT INTO sold_by (id_article,id_supplier,origin) VALUES(?,?,?)";
             PreparedStatement smt_sold_by = cnx.prepareStatement(query_sold_by);
             MArticles sold_by_id_article = getArticleByNameFromDB(art.getName());
@@ -418,14 +457,23 @@ public class MArticles {
             smt_sold_by.setInt(2, DBProvider.getProvidersIdByNameFromDB(art.getProvider()));
             smt_sold_by.setString(3, art.getOrigin());
             smt_sold_by.executeUpdate();
+            success = (executed);
+            cnx.commit();
         } catch (Exception ex) {
+            success = false;
+            cnx.rollback();
             ex.printStackTrace();
         }
         return success;
     }
 
+    /**
+     * used to delete an article from the table tool
+     *
+     * @return boolean
+     * @param id_article id article to delete
+     */
     static public boolean deleteArticleFromTool(int id_article) throws SQLException {
-
         try {
             String query = "DELETE FROM nesti_tool WHERE id_article=?";
             PreparedStatement smt = cnx.prepareStatement(query);
@@ -434,7 +482,7 @@ public class MArticles {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return false;
+        return true;
     }
 
     static public boolean deleteArticleFromSoldBy(int id_article) throws SQLException {

@@ -12,16 +12,18 @@ import static FilRouge.Model.MArticles.getArticleByNameDetails;
 import static FilRouge.Model.MArticles.updateArticle;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JLabel;
 
 public class DBArticle {
 
     /**
-     * request to get all article from DB     
+     * request to get all article from DB
+     *
      * @return an array of article
-     * @throws SQLException sql 
+     * @throws SQLException sql
      */
     static public ArrayList getArticlesFromDB() throws SQLException {
-     
+
         MArticles art = new MArticles();
         ArrayList<MArticles> arr = new ArrayList<>();;
         arr = art.getArticles();
@@ -32,7 +34,7 @@ public class DBArticle {
      * request to get all article from DB where status is available
      *
      * @return an array of article
-     * @throws SQLException  sql
+     * @throws SQLException sql
      */
     static public ArrayList getArticlesForCommandFromDB() throws SQLException {
         MArticles art = new MArticles();
@@ -44,7 +46,7 @@ public class DBArticle {
     /**
      * request to get all article for research
      *
-     * @param search String 
+     * @param search String
      * @return array of article searched
      * @throws SQLException sql
      */
@@ -73,34 +75,35 @@ public class DBArticle {
 
     /**
      * get an article by name with few information
+     *
      * @param article string
-     * @return article 
+     * @return article
      */
     static public MArticles getArticleByNameFromDB(String article) {
         MArticles art = new MArticles();
         art = getArticleByName(article);
         return art;
     }
-    
+
     /**
      * get an article by name with all information
+     *
      * @param article string
      * @return article
      */
-
     static public MArticles getArticleByNameDetailsFromDB(String article) {
         MArticles art = new MArticles();
         art = getArticleByNameDetails(article);
         return art;
 
     }
-    
-    /**
-     * get an article by id 
-     * @param id int
-     * @return article 
-     */
 
+    /**
+     * get an article by id
+     *
+     * @param id int
+     * @return article
+     */
     static public MArticles getArticleByIdFromDB(int id) throws SQLException {
         MArticles art = new MArticles();
         art = getArticleById(id);
@@ -108,9 +111,9 @@ public class DBArticle {
 
     }
 
-    
     /**
-     * delete an article by name 
+     * delete an article by name
+     *
      * @param article string
      * @return nothing
      */
@@ -120,28 +123,34 @@ public class DBArticle {
         return success;
 
     }
-    
+
     /**
      * add article to DB
+     *
      * @param art object article
      * @param id_user int
      * @return nothing
-     * @throws SQLException  sql
+     * @throws SQLException sql
      */
-
-    static public boolean addArticleToDB(MArticles art, int id_user) throws SQLException {
+    static public boolean addArticleToDB(MArticles art, int id_user, JLabel label) throws SQLException {
         boolean success = false;
-        addArticle(art, id_user);
+        success = addArticle(art, id_user);
+        if (success) {
+            label.setText("Ajout de " + art.getName() + " Effectué");
+        } else {
+            label.setText("Ajout de " + art.getName() + " Echoué");
+        }
+        System.out.println("success" + success);
         return success;
     }
-    
+
     /**
      * delete article from table tool
+     *
      * @param id_article int
      * @return nothing
      * @throws SQLException sql
      */
-
     static public boolean deleteArticleFromToolToDB(int id_article) throws SQLException {
         boolean success = false;
         deleteArticleFromTool(id_article);
@@ -150,7 +159,8 @@ public class DBArticle {
 
     /**
      * delete article from table ingredient
-     * @param id_article int 
+     *
+     * @param id_article int
      * @return nothing
      * @throws SQLException sql
      */
@@ -162,6 +172,7 @@ public class DBArticle {
 
     /**
      * update an article
+     *
      * @param art object article
      * @return nothing
      * @throws SQLException sql
@@ -174,6 +185,7 @@ public class DBArticle {
 
     /**
      * 0 if it's a tool, 1 for an ingredient
+     *
      * @param id int article
      * @return int 1 or 0
      */
@@ -184,6 +196,7 @@ public class DBArticle {
 
     /**
      * get an article by name with all information
+     *
      * @param article string
      * @return article
      */
@@ -192,13 +205,13 @@ public class DBArticle {
         art = MArticles.getArticleByNameFullDetails(article);
         return art;
     }
-    
+
     /**
      * return a String of the origin of the article
+     *
      * @param id int
      * @return string origin
      */
-
     static public String getOriginByIdArticleFromDB(int id) {
         String origin = null;
         origin = MArticles.getOriginByIdArticle(id);

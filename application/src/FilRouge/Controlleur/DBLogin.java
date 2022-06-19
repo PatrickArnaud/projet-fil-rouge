@@ -3,6 +3,7 @@ package FilRouge.Controlleur;
 import FilRouge.Model.MLogin;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -10,7 +11,14 @@ public class DBLogin {
 
     static Connection cnx = DBConnect.connect();
 
-    static public MLogin getLog(String username, String password) {
+    /**
+     * used to log user
+     *
+     * @return user profile
+     * @param username user login
+     * @param password user password
+     */
+      static public MLogin getLog(String username, String password) {
         MLogin log = null;
 
         try {
@@ -33,12 +41,14 @@ public class DBLogin {
 
     }
 
+    //
     static public String getUser(int id) {
         String user_name = null;
         try {
-            String query = "SELECT  username FROM nesti_user WHERE  id_user ='" + id + "'";
-            Statement smt = cnx.createStatement();
-            ResultSet resultSet = smt.executeQuery(query);
+            String query = "SELECT  username FROM nesti_user WHERE  id_user = ?";
+            PreparedStatement psmt = cnx.prepareStatement(query);
+            psmt.setInt(1, id);
+            ResultSet resultSet = psmt.executeQuery();
             while (resultSet.next()) {
                 user_name = resultSet.getString(1);
             }
@@ -50,13 +60,19 @@ public class DBLogin {
         }
 
     }
-    
+
+    /**
+     * get the role of user    
+     * @return user role
+     * @param id user id     
+     */    
     static public int getRoleUser(int id) {
         int user_role = 0;
         try {
-            String query = "SELECT  id_role FROM nesti_user WHERE  id_user ='" + id + "'";
-            Statement smt = cnx.createStatement();
-            ResultSet resultSet = smt.executeQuery(query);
+            String query = "SELECT  id_role FROM nesti_user WHERE  id_user = ?";
+            PreparedStatement psmt = cnx.prepareStatement(query);
+            psmt.setInt(1, id);
+            ResultSet resultSet = psmt.executeQuery();
             while (resultSet.next()) {
                 user_role = resultSet.getInt(1);
             }
@@ -65,7 +81,6 @@ public class DBLogin {
         } finally {
             return user_role;
         }
-
     }
 
 }

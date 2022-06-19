@@ -93,7 +93,12 @@ public class MUser {
         }
         return success;
     }
-
+    
+     /**
+     * add an user to database   
+     * @return boolean
+     * @param user anoject of user
+     */        
     static public boolean addUser(MUser user) throws SQLException {
         boolean success = false;
         try {

@@ -131,8 +131,11 @@ public class MContact {
         }
         return success;
     }
-    
-    
+     /**
+     * update a contact 
+     * @return boolean
+     * @param contact MContact  
+     */        
     static public boolean updateContact(MContact contact) throws SQLException {
         boolean success = false;
         try {

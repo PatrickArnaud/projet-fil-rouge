@@ -39,7 +39,6 @@ public class VDetails extends javax.swing.JFrame {
         }
         ini_v_details();
         int role = DBLogin.getRoleUser(id_user);
-
         if (role == 3) {
             modify.setVisible(false);
             delete.setVisible(false);
